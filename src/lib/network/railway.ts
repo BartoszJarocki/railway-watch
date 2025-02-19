@@ -1,25 +1,43 @@
 // hooks/useRailway.ts
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import request from 'graphql-request';
 import {
   ProjectsQuery,
+  ProjectsQueryVariables,
   ServiceQuery,
   DeploymentLogsQuery,
   ServiceInstanceDeployMutation,
+  ServiceInstanceDeployMutationVariables,
   DeploymentStopMutation,
+  DeploymentStopMutationVariables,
   DeploymentRestartMutation,
+  DeploymentRestartMutationVariables,
+  ServiceInstanceUpdateMutation,
+  ServiceInstanceUpdateMutationVariables,
 } from './gql/graphql';
+import {
+  GET_PROJECTS,
+  GET_SERVICE,
+  GET_DEPLOYMENT_LOGS,
+  DEPLOY_SERVICE,
+  STOP_DEPLOYMENT,
+  RESTART_DEPLOYMENT,
+  SCALE_SERVICE,
+} from './operations';
 
-export function useProjects() {
+const endpoint = '/api/graphql';
+
+export function useProjects(variables: ProjectsQueryVariables) {
   return useQuery<ProjectsQuery>({
-    queryKey: ['projects'],
-    queryFn: () => fetch('/api/projects').then((res) => res.json()),
+    queryKey: ['projects', variables],
+    queryFn: () => request(endpoint, GET_PROJECTS, variables),
   });
 }
 
 export function useService(id: string) {
   return useQuery<ServiceQuery>({
     queryKey: ['service', id],
-    queryFn: () => fetch(`/api/services/${id}`).then((res) => res.json()),
+    queryFn: () => request(endpoint, GET_SERVICE, { id }),
     enabled: !!id,
   });
 }
@@ -28,9 +46,12 @@ export function useDeploymentLogs(deploymentId: string) {
   return useQuery<DeploymentLogsQuery>({
     queryKey: ['deployment-logs', deploymentId],
     queryFn: () =>
-      fetch(`/api/deployments/${deploymentId}/logs`).then((res) => res.json()),
+      request(endpoint, GET_DEPLOYMENT_LOGS, {
+        deploymentId,
+        limit: 100,
+      }),
     enabled: !!deploymentId,
-    refetchInterval: 5000, // Poll every 5 seconds
+    refetchInterval: 5000,
   });
 }
 
@@ -40,14 +61,9 @@ export function useDeployService() {
   return useMutation<
     ServiceInstanceDeployMutation,
     Error,
-    { serviceId: string; environmentId: string }
+    ServiceInstanceDeployMutationVariables
   >({
-    mutationFn: ({ serviceId, environmentId }) =>
-      fetch(`/api/services/${serviceId}/deploy`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ environmentId }),
-      }).then((res) => res.json()),
+    mutationFn: (variables) => request(endpoint, DEPLOY_SERVICE, variables),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['projects'] });
     },
@@ -57,11 +73,12 @@ export function useDeployService() {
 export function useStopDeployment() {
   const queryClient = useQueryClient();
 
-  return useMutation<DeploymentStopMutation, Error, string>({
-    mutationFn: (deploymentId) =>
-      fetch(`/api/deployments/${deploymentId}/stop`, {
-        method: 'POST',
-      }).then((res) => res.json()),
+  return useMutation<
+    DeploymentStopMutation,
+    Error,
+    DeploymentStopMutationVariables
+  >({
+    mutationFn: (variables) => request(endpoint, STOP_DEPLOYMENT, variables),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['projects'] });
     },
@@ -71,11 +88,27 @@ export function useStopDeployment() {
 export function useRestartDeployment() {
   const queryClient = useQueryClient();
 
-  return useMutation<DeploymentRestartMutation, Error, string>({
-    mutationFn: (deploymentId) =>
-      fetch(`/api/deployments/${deploymentId}/restart`, {
-        method: 'POST',
-      }).then((res) => res.json()),
+  return useMutation<
+    DeploymentRestartMutation,
+    Error,
+    DeploymentRestartMutationVariables
+  >({
+    mutationFn: (variables) => request(endpoint, RESTART_DEPLOYMENT, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['projects'] });
+    },
+  });
+}
+
+export function useScaleService() {
+  const queryClient = useQueryClient();
+
+  return useMutation<
+    ServiceInstanceUpdateMutation,
+    Error,
+    ServiceInstanceUpdateMutationVariables
+  >({
+    mutationFn: (variables) => request(endpoint, SCALE_SERVICE, variables),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['projects'] });
     },

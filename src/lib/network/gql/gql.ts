@@ -14,6 +14,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
+    "\n  mutation serviceInstanceUpdate(\n    $serviceId: String!\n    $environmentId: String\n    $input: ServiceInstanceUpdateInput!\n  ) {\n    serviceInstanceUpdate(\n      serviceId: $serviceId\n      environmentId: $environmentId\n      input: $input\n    )\n  }\n": typeof types.ServiceInstanceUpdateDocument,
     "\n  query projects($after: String, $before: String, $first: Int, $last: Int) {\n    projects(after: $after, before: $before, first: $first, last: $last) {\n      edges {\n        node {\n          id\n          name\n          services {\n            edges {\n              node {\n                id\n                name\n                serviceInstances {\n                  edges {\n                    node {\n                      id\n                      # Latest deployment for status\n                      latestDeployment {\n                        id\n                        status\n                        createdAt\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n": typeof types.ProjectsDocument,
     "\n  query service($id: String!) {\n    service(id: $id) {\n      id\n      name\n      deployments {\n        edges {\n          node {\n            id\n            status\n            createdAt\n            url\n            staticUrl\n            suggestAddServiceDomain\n          }\n        }\n      }\n    }\n  }\n": typeof types.ServiceDocument,
     "\n  mutation deploymentTriggerCreate($input: DeploymentTriggerCreateInput!) {\n    deploymentTriggerCreate(input: $input) {\n      id\n      projectId\n      serviceId\n      branch\n      repository\n    }\n  }\n": typeof types.DeploymentTriggerCreateDocument,
@@ -23,6 +24,7 @@ type Documents = {
     "\n  mutation deploymentRestart($id: String!) {\n    deploymentRestart(id: $id)\n  }\n": typeof types.DeploymentRestartDocument,
 };
 const documents: Documents = {
+    "\n  mutation serviceInstanceUpdate(\n    $serviceId: String!\n    $environmentId: String\n    $input: ServiceInstanceUpdateInput!\n  ) {\n    serviceInstanceUpdate(\n      serviceId: $serviceId\n      environmentId: $environmentId\n      input: $input\n    )\n  }\n": types.ServiceInstanceUpdateDocument,
     "\n  query projects($after: String, $before: String, $first: Int, $last: Int) {\n    projects(after: $after, before: $before, first: $first, last: $last) {\n      edges {\n        node {\n          id\n          name\n          services {\n            edges {\n              node {\n                id\n                name\n                serviceInstances {\n                  edges {\n                    node {\n                      id\n                      # Latest deployment for status\n                      latestDeployment {\n                        id\n                        status\n                        createdAt\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n": types.ProjectsDocument,
     "\n  query service($id: String!) {\n    service(id: $id) {\n      id\n      name\n      deployments {\n        edges {\n          node {\n            id\n            status\n            createdAt\n            url\n            staticUrl\n            suggestAddServiceDomain\n          }\n        }\n      }\n    }\n  }\n": types.ServiceDocument,
     "\n  mutation deploymentTriggerCreate($input: DeploymentTriggerCreateInput!) {\n    deploymentTriggerCreate(input: $input) {\n      id\n      projectId\n      serviceId\n      branch\n      repository\n    }\n  }\n": types.DeploymentTriggerCreateDocument,
@@ -46,6 +48,10 @@ const documents: Documents = {
  */
 export function graphql(source: string): unknown;
 
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation serviceInstanceUpdate(\n    $serviceId: String!\n    $environmentId: String\n    $input: ServiceInstanceUpdateInput!\n  ) {\n    serviceInstanceUpdate(\n      serviceId: $serviceId\n      environmentId: $environmentId\n      input: $input\n    )\n  }\n"): (typeof documents)["\n  mutation serviceInstanceUpdate(\n    $serviceId: String!\n    $environmentId: String\n    $input: ServiceInstanceUpdateInput!\n  ) {\n    serviceInstanceUpdate(\n      serviceId: $serviceId\n      environmentId: $environmentId\n      input: $input\n    )\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

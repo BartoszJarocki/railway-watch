@@ -1,7 +1,19 @@
-// app/gql/operations.ts
 import { graphql } from './gql';
 
-// Get projects
+export const SCALE_SERVICE = graphql(`
+  mutation serviceInstanceUpdate(
+    $serviceId: String!
+    $environmentId: String
+    $input: ServiceInstanceUpdateInput!
+  ) {
+    serviceInstanceUpdate(
+      serviceId: $serviceId
+      environmentId: $environmentId
+      input: $input
+    )
+  }
+`);
+
 export const GET_PROJECTS = graphql(`
   query projects($after: String, $before: String, $first: Int, $last: Int) {
     projects(after: $after, before: $before, first: $first, last: $last) {
@@ -36,7 +48,6 @@ export const GET_PROJECTS = graphql(`
   }
 `);
 
-// Get service details
 export const GET_SERVICE = graphql(`
   query service($id: String!) {
     service(id: $id) {
@@ -58,7 +69,6 @@ export const GET_SERVICE = graphql(`
   }
 `);
 
-// Deploy trigger mutation
 export const DEPLOY_TRIGGER = graphql(`
   mutation deploymentTriggerCreate($input: DeploymentTriggerCreateInput!) {
     deploymentTriggerCreate(input: $input) {
@@ -71,14 +81,12 @@ export const DEPLOY_TRIGGER = graphql(`
   }
 `);
 
-// Service instance deploy
 export const DEPLOY_SERVICE = graphql(`
   mutation serviceInstanceDeploy($environmentId: String!, $serviceId: String!) {
     serviceInstanceDeploy(environmentId: $environmentId, serviceId: $serviceId)
   }
 `);
 
-// Get deployment logs
 export const GET_DEPLOYMENT_LOGS = graphql(`
   query deploymentLogs($deploymentId: String!, $limit: Int) {
     deploymentLogs(deploymentId: $deploymentId, limit: $limit) {
@@ -89,14 +97,12 @@ export const GET_DEPLOYMENT_LOGS = graphql(`
   }
 `);
 
-// Stop deployment
 export const STOP_DEPLOYMENT = graphql(`
   mutation deploymentStop($id: String!) {
     deploymentStop(id: $id)
   }
 `);
 
-// Restart deployment
 export const RESTART_DEPLOYMENT = graphql(`
   mutation deploymentRestart($id: String!) {
     deploymentRestart(id: $id)

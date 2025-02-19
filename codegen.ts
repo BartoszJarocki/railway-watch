@@ -13,20 +13,15 @@ const config: CodegenConfig = {
   generates: {
     './src/lib/network/gql/': {
       preset: 'client',
-      plugins: [
-        'typescript',
-        'typescript-operations',
-        'typescript-react-query',
-      ],
       config: {
         fetcher: {
           endpoint: 'https://backboard.railway.com/graphql/v2',
-          fetchParams: {
+          fetchParams: `{
             headers: {
               'Content-Type': 'application/json',
-              Authorization: `Bearer ${process.env.RAILWAY_API_TOKEN}`,
-            },
-          },
+              'Authorization': \`Bearer \${process.env.RAILWAY_API_TOKEN}\`
+            }
+          }`,
         },
       },
     },
