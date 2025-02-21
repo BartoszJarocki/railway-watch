@@ -5,6 +5,9 @@ export const DeploymentFragment = graphql(`
     id
     status
     createdAt
+    url
+    staticUrl
+    suggestAddServiceDomain
   }
 `);
 
@@ -12,8 +15,16 @@ export const ServiceInstanceFragment = graphql(`
   fragment ServiceInstanceItem on ServiceInstance {
     id
     latestDeployment {
+      createdAt
+      url
+      status
       ...DeploymentItem
     }
+    healthcheckPath
+    numReplicas
+    region
+    serviceId
+    serviceName
   }
 `);
 
@@ -21,10 +32,21 @@ export const ServiceFragment = graphql(`
   fragment ServiceItem on Service {
     id
     name
+    projectId
     serviceInstances {
       edges {
         node {
+          latestDeployment {
+            ...DeploymentItem
+          }
           ...ServiceInstanceItem
+        }
+      }
+    }
+    deployments {
+      edges {
+        node {
+          ...DeploymentItem
         }
       }
     }
@@ -35,10 +57,25 @@ export const ProjectFragment = graphql(`
   fragment ProjectItem on Project {
     id
     name
+    description
+    createdAt
+    isPublic
     services {
       edges {
         node {
           id
+          name
+          serviceInstances {
+            edges {
+              node {
+                id
+                latestDeployment {
+                  status
+                  ...DeploymentItem
+                }
+              }
+            }
+          }
           ...ServiceItem
         }
       }
@@ -69,6 +106,15 @@ export const GET_PROJECTS = graphql(`
           ...ProjectItem
         }
       }
+    }
+  }
+`);
+
+export const GET_PROJECT_BY_ID = graphql(`
+  query project($id: String!) {
+    project(id: $id) {
+      id
+      ...ProjectItem
     }
   }
 `);

@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 // Define allowed operation names
 const ALLOWED_OPERATIONS = [
   'projects',
+  'project',
   'serviceInstanceUpdate',
   'serviceInstanceDeploy',
 ] as const;

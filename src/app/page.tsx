@@ -150,7 +150,7 @@ export default function Page() {
         )}
       >
         <Link
-          href="/dashboard"
+          href="/projects"
           aria-disabled={!isApplicationReady}
           tabIndex={!isApplicationReady ? -1 : undefined}
         >

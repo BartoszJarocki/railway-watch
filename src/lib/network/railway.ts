@@ -14,6 +14,7 @@ import {
   DeploymentRestartMutationVariables,
   ServiceInstanceUpdateMutation,
   ServiceInstanceUpdateMutationVariables,
+  ProjectQuery,
 } from './gql/graphql';
 import {
   GET_PROJECTS,
@@ -23,6 +24,7 @@ import {
   STOP_DEPLOYMENT,
   RESTART_DEPLOYMENT,
   SCALE_SERVICE,
+  GET_PROJECT_BY_ID,
 } from './operations';
 
 const endpoint = 'http://localhost:3000/api/graphql';
@@ -31,6 +33,14 @@ export function useProjects(variables: ProjectsQueryVariables) {
   return useQuery<ProjectsQuery>({
     queryKey: ['projects', variables],
     queryFn: () => request(endpoint, GET_PROJECTS, variables),
+  });
+}
+
+export function useProject(id: string) {
+  return useQuery<ProjectQuery>({
+    queryKey: ['project', id],
+    queryFn: () => request(endpoint, GET_PROJECT_BY_ID, { id }),
+    enabled: !!id,
   });
 }
 

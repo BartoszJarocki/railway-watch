@@ -14,12 +14,13 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
-    "\n  fragment DeploymentItem on Deployment {\n    id\n    status\n    createdAt\n  }\n": typeof types.DeploymentItemFragmentDoc,
-    "\n  fragment ServiceInstanceItem on ServiceInstance {\n    id\n    latestDeployment {\n      ...DeploymentItem\n    }\n  }\n": typeof types.ServiceInstanceItemFragmentDoc,
-    "\n  fragment ServiceItem on Service {\n    id\n    name\n    serviceInstances {\n      edges {\n        node {\n          ...ServiceInstanceItem\n        }\n      }\n    }\n  }\n": typeof types.ServiceItemFragmentDoc,
-    "\n  fragment ProjectItem on Project {\n    id\n    name\n    services {\n      edges {\n        node {\n          id\n          ...ServiceItem\n        }\n      }\n    }\n  }\n": typeof types.ProjectItemFragmentDoc,
+    "\n  fragment DeploymentItem on Deployment {\n    id\n    status\n    createdAt\n    url\n    staticUrl\n    suggestAddServiceDomain\n  }\n": typeof types.DeploymentItemFragmentDoc,
+    "\n  fragment ServiceInstanceItem on ServiceInstance {\n    id\n    latestDeployment {\n      createdAt\n      url\n      status\n      ...DeploymentItem\n    }\n    healthcheckPath\n    numReplicas\n    region\n    serviceId\n    serviceName\n  }\n": typeof types.ServiceInstanceItemFragmentDoc,
+    "\n  fragment ServiceItem on Service {\n    id\n    name\n    projectId\n    serviceInstances {\n      edges {\n        node {\n          latestDeployment {\n            ...DeploymentItem\n          }\n          ...ServiceInstanceItem\n        }\n      }\n    }\n    deployments {\n      edges {\n        node {\n          ...DeploymentItem\n        }\n      }\n    }\n  }\n": typeof types.ServiceItemFragmentDoc,
+    "\n  fragment ProjectItem on Project {\n    id\n    name\n    description\n    createdAt\n    isPublic\n    services {\n      edges {\n        node {\n          id\n          name\n          serviceInstances {\n            edges {\n              node {\n                id\n                latestDeployment {\n                  status\n                  ...DeploymentItem\n                }\n              }\n            }\n          }\n          ...ServiceItem\n        }\n      }\n    }\n  }\n": typeof types.ProjectItemFragmentDoc,
     "\n  mutation serviceInstanceUpdate(\n    $serviceId: String!\n    $environmentId: String\n    $input: ServiceInstanceUpdateInput!\n  ) {\n    serviceInstanceUpdate(\n      serviceId: $serviceId\n      environmentId: $environmentId\n      input: $input\n    )\n  }\n": typeof types.ServiceInstanceUpdateDocument,
     "\n  query projects($after: String, $before: String, $first: Int, $last: Int) {\n    projects(after: $after, before: $before, first: $first, last: $last) {\n      edges {\n        node {\n          id\n          ...ProjectItem\n        }\n      }\n    }\n  }\n": typeof types.ProjectsDocument,
+    "\n  query project($id: String!) {\n    project(id: $id) {\n      id\n      ...ProjectItem\n    }\n  }\n": typeof types.ProjectDocument,
     "\n  query service($id: String!) {\n    service(id: $id) {\n      id\n      name\n      deployments {\n        edges {\n          node {\n            id\n            status\n            createdAt\n            url\n            staticUrl\n            suggestAddServiceDomain\n          }\n        }\n      }\n    }\n  }\n": typeof types.ServiceDocument,
     "\n  mutation deploymentTriggerCreate($input: DeploymentTriggerCreateInput!) {\n    deploymentTriggerCreate(input: $input) {\n      id\n      projectId\n      serviceId\n      branch\n      repository\n    }\n  }\n": typeof types.DeploymentTriggerCreateDocument,
     "\n  mutation serviceInstanceDeploy($environmentId: String!, $serviceId: String!) {\n    serviceInstanceDeploy(environmentId: $environmentId, serviceId: $serviceId)\n  }\n": typeof types.ServiceInstanceDeployDocument,
@@ -28,12 +29,13 @@ type Documents = {
     "\n  mutation deploymentRestart($id: String!) {\n    deploymentRestart(id: $id)\n  }\n": typeof types.DeploymentRestartDocument,
 };
 const documents: Documents = {
-    "\n  fragment DeploymentItem on Deployment {\n    id\n    status\n    createdAt\n  }\n": types.DeploymentItemFragmentDoc,
-    "\n  fragment ServiceInstanceItem on ServiceInstance {\n    id\n    latestDeployment {\n      ...DeploymentItem\n    }\n  }\n": types.ServiceInstanceItemFragmentDoc,
-    "\n  fragment ServiceItem on Service {\n    id\n    name\n    serviceInstances {\n      edges {\n        node {\n          ...ServiceInstanceItem\n        }\n      }\n    }\n  }\n": types.ServiceItemFragmentDoc,
-    "\n  fragment ProjectItem on Project {\n    id\n    name\n    services {\n      edges {\n        node {\n          id\n          ...ServiceItem\n        }\n      }\n    }\n  }\n": types.ProjectItemFragmentDoc,
+    "\n  fragment DeploymentItem on Deployment {\n    id\n    status\n    createdAt\n    url\n    staticUrl\n    suggestAddServiceDomain\n  }\n": types.DeploymentItemFragmentDoc,
+    "\n  fragment ServiceInstanceItem on ServiceInstance {\n    id\n    latestDeployment {\n      createdAt\n      url\n      status\n      ...DeploymentItem\n    }\n    healthcheckPath\n    numReplicas\n    region\n    serviceId\n    serviceName\n  }\n": types.ServiceInstanceItemFragmentDoc,
+    "\n  fragment ServiceItem on Service {\n    id\n    name\n    projectId\n    serviceInstances {\n      edges {\n        node {\n          latestDeployment {\n            ...DeploymentItem\n          }\n          ...ServiceInstanceItem\n        }\n      }\n    }\n    deployments {\n      edges {\n        node {\n          ...DeploymentItem\n        }\n      }\n    }\n  }\n": types.ServiceItemFragmentDoc,
+    "\n  fragment ProjectItem on Project {\n    id\n    name\n    description\n    createdAt\n    isPublic\n    services {\n      edges {\n        node {\n          id\n          name\n          serviceInstances {\n            edges {\n              node {\n                id\n                latestDeployment {\n                  status\n                  ...DeploymentItem\n                }\n              }\n            }\n          }\n          ...ServiceItem\n        }\n      }\n    }\n  }\n": types.ProjectItemFragmentDoc,
     "\n  mutation serviceInstanceUpdate(\n    $serviceId: String!\n    $environmentId: String\n    $input: ServiceInstanceUpdateInput!\n  ) {\n    serviceInstanceUpdate(\n      serviceId: $serviceId\n      environmentId: $environmentId\n      input: $input\n    )\n  }\n": types.ServiceInstanceUpdateDocument,
     "\n  query projects($after: String, $before: String, $first: Int, $last: Int) {\n    projects(after: $after, before: $before, first: $first, last: $last) {\n      edges {\n        node {\n          id\n          ...ProjectItem\n        }\n      }\n    }\n  }\n": types.ProjectsDocument,
+    "\n  query project($id: String!) {\n    project(id: $id) {\n      id\n      ...ProjectItem\n    }\n  }\n": types.ProjectDocument,
     "\n  query service($id: String!) {\n    service(id: $id) {\n      id\n      name\n      deployments {\n        edges {\n          node {\n            id\n            status\n            createdAt\n            url\n            staticUrl\n            suggestAddServiceDomain\n          }\n        }\n      }\n    }\n  }\n": types.ServiceDocument,
     "\n  mutation deploymentTriggerCreate($input: DeploymentTriggerCreateInput!) {\n    deploymentTriggerCreate(input: $input) {\n      id\n      projectId\n      serviceId\n      branch\n      repository\n    }\n  }\n": types.DeploymentTriggerCreateDocument,
     "\n  mutation serviceInstanceDeploy($environmentId: String!, $serviceId: String!) {\n    serviceInstanceDeploy(environmentId: $environmentId, serviceId: $serviceId)\n  }\n": types.ServiceInstanceDeployDocument,
@@ -59,19 +61,19 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  fragment DeploymentItem on Deployment {\n    id\n    status\n    createdAt\n  }\n"): (typeof documents)["\n  fragment DeploymentItem on Deployment {\n    id\n    status\n    createdAt\n  }\n"];
+export function graphql(source: "\n  fragment DeploymentItem on Deployment {\n    id\n    status\n    createdAt\n    url\n    staticUrl\n    suggestAddServiceDomain\n  }\n"): (typeof documents)["\n  fragment DeploymentItem on Deployment {\n    id\n    status\n    createdAt\n    url\n    staticUrl\n    suggestAddServiceDomain\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  fragment ServiceInstanceItem on ServiceInstance {\n    id\n    latestDeployment {\n      ...DeploymentItem\n    }\n  }\n"): (typeof documents)["\n  fragment ServiceInstanceItem on ServiceInstance {\n    id\n    latestDeployment {\n      ...DeploymentItem\n    }\n  }\n"];
+export function graphql(source: "\n  fragment ServiceInstanceItem on ServiceInstance {\n    id\n    latestDeployment {\n      createdAt\n      url\n      status\n      ...DeploymentItem\n    }\n    healthcheckPath\n    numReplicas\n    region\n    serviceId\n    serviceName\n  }\n"): (typeof documents)["\n  fragment ServiceInstanceItem on ServiceInstance {\n    id\n    latestDeployment {\n      createdAt\n      url\n      status\n      ...DeploymentItem\n    }\n    healthcheckPath\n    numReplicas\n    region\n    serviceId\n    serviceName\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  fragment ServiceItem on Service {\n    id\n    name\n    serviceInstances {\n      edges {\n        node {\n          ...ServiceInstanceItem\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  fragment ServiceItem on Service {\n    id\n    name\n    serviceInstances {\n      edges {\n        node {\n          ...ServiceInstanceItem\n        }\n      }\n    }\n  }\n"];
+export function graphql(source: "\n  fragment ServiceItem on Service {\n    id\n    name\n    projectId\n    serviceInstances {\n      edges {\n        node {\n          latestDeployment {\n            ...DeploymentItem\n          }\n          ...ServiceInstanceItem\n        }\n      }\n    }\n    deployments {\n      edges {\n        node {\n          ...DeploymentItem\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  fragment ServiceItem on Service {\n    id\n    name\n    projectId\n    serviceInstances {\n      edges {\n        node {\n          latestDeployment {\n            ...DeploymentItem\n          }\n          ...ServiceInstanceItem\n        }\n      }\n    }\n    deployments {\n      edges {\n        node {\n          ...DeploymentItem\n        }\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  fragment ProjectItem on Project {\n    id\n    name\n    services {\n      edges {\n        node {\n          id\n          ...ServiceItem\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  fragment ProjectItem on Project {\n    id\n    name\n    services {\n      edges {\n        node {\n          id\n          ...ServiceItem\n        }\n      }\n    }\n  }\n"];
+export function graphql(source: "\n  fragment ProjectItem on Project {\n    id\n    name\n    description\n    createdAt\n    isPublic\n    services {\n      edges {\n        node {\n          id\n          name\n          serviceInstances {\n            edges {\n              node {\n                id\n                latestDeployment {\n                  status\n                  ...DeploymentItem\n                }\n              }\n            }\n          }\n          ...ServiceItem\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  fragment ProjectItem on Project {\n    id\n    name\n    description\n    createdAt\n    isPublic\n    services {\n      edges {\n        node {\n          id\n          name\n          serviceInstances {\n            edges {\n              node {\n                id\n                latestDeployment {\n                  status\n                  ...DeploymentItem\n                }\n              }\n            }\n          }\n          ...ServiceItem\n        }\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -80,6 +82,10 @@ export function graphql(source: "\n  mutation serviceInstanceUpdate(\n    $servi
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query projects($after: String, $before: String, $first: Int, $last: Int) {\n    projects(after: $after, before: $before, first: $first, last: $last) {\n      edges {\n        node {\n          id\n          ...ProjectItem\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query projects($after: String, $before: String, $first: Int, $last: Int) {\n    projects(after: $after, before: $before, first: $first, last: $last) {\n      edges {\n        node {\n          id\n          ...ProjectItem\n        }\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query project($id: String!) {\n    project(id: $id) {\n      id\n      ...ProjectItem\n    }\n  }\n"): (typeof documents)["\n  query project($id: String!) {\n    project(id: $id) {\n      id\n      ...ProjectItem\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
