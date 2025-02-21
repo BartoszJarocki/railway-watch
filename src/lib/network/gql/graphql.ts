@@ -50,6 +50,7 @@ export enum ActiveFeatureFlag {
 }
 
 export enum ActiveServiceFeatureFlag {
+  BetterCronWorkflow = 'BETTER_CRON_WORKFLOW',
   CopyVolumeToEnvironment = 'COPY_VOLUME_TO_ENVIRONMENT',
   LegacyCrons = 'LEGACY_CRONS',
   Placeholder = 'PLACEHOLDER'

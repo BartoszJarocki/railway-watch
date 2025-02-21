@@ -25,7 +25,7 @@ import {
   SCALE_SERVICE,
 } from './operations';
 
-const endpoint = '/api/graphql';
+const endpoint = 'http://localhost:3000/api/graphql';
 
 export function useProjects(variables: ProjectsQueryVariables) {
   return useQuery<ProjectsQuery>({
