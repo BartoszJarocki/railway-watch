@@ -1,10 +1,6 @@
 // app/api/railway/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 
-if (!process.env.RAILWAY_API_TOKEN) {
-  throw new Error('RAILWAY_API_TOKEN is not defined');
-}
-
 // Define allowed operation names
 const ALLOWED_OPERATIONS = [
   'projects',
@@ -27,7 +23,7 @@ export async function POST(request: NextRequest) {
     const response = await fetch('https://backboard.railway.app/graphql/v2', {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${process.env.RAILWAY_API_TOKEN}`,
+        Authorization: `Bearer ${process.env.RAILWAY_API_ACCOUNT_TOKEN}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),

@@ -1,5 +1,51 @@
 import { graphql } from './gql';
 
+export const DeploymentFragment = graphql(`
+  fragment DeploymentItem on Deployment {
+    id
+    status
+    createdAt
+  }
+`);
+
+export const ServiceInstanceFragment = graphql(`
+  fragment ServiceInstanceItem on ServiceInstance {
+    id
+    latestDeployment {
+      ...DeploymentItem
+    }
+  }
+`);
+
+export const ServiceFragment = graphql(`
+  fragment ServiceItem on Service {
+    id
+    name
+    serviceInstances {
+      edges {
+        node {
+          ...ServiceInstanceItem
+        }
+      }
+    }
+  }
+`);
+
+export const ProjectFragment = graphql(`
+  fragment ProjectItem on Project {
+    id
+    name
+    services {
+      edges {
+        node {
+          id
+          ...ServiceItem
+        }
+      }
+    }
+  }
+`);
+
 export const SCALE_SERVICE = graphql(`
   mutation serviceInstanceUpdate(
     $serviceId: String!
@@ -20,28 +66,7 @@ export const GET_PROJECTS = graphql(`
       edges {
         node {
           id
-          name
-          services {
-            edges {
-              node {
-                id
-                name
-                serviceInstances {
-                  edges {
-                    node {
-                      id
-                      # Latest deployment for status
-                      latestDeployment {
-                        id
-                        status
-                        createdAt
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
+          ...ProjectItem
         }
       }
     }
