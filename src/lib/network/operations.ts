@@ -14,6 +14,7 @@ export const DeploymentFragment = graphql(`
 export const ServiceInstanceFragment = graphql(`
   fragment ServiceInstanceItem on ServiceInstance {
     id
+    environmentId
     latestDeployment {
       createdAt
       url
@@ -60,6 +61,14 @@ export const ProjectFragment = graphql(`
     description
     createdAt
     isPublic
+    environments {
+      edges {
+        node {
+          id
+          name
+        }
+      }
+    }
     services {
       edges {
         node {

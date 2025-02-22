@@ -1,4 +1,5 @@
-// hooks/useRailway.ts
+'use client';
+
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import request from 'graphql-request';
 import {
@@ -27,19 +28,19 @@ import {
   GET_PROJECT_BY_ID,
 } from './operations';
 
-const endpoint = 'http://localhost:3000/api/graphql';
+export const GRAPHQL_ENDPOINT = `${window.location.origin}/api/graphql`;
 
 export function useProjects(variables: ProjectsQueryVariables) {
   return useQuery<ProjectsQuery>({
     queryKey: ['projects', variables],
-    queryFn: () => request(endpoint, GET_PROJECTS, variables),
+    queryFn: () => request(GRAPHQL_ENDPOINT, GET_PROJECTS, variables),
   });
 }
 
 export function useProject(id: string) {
   return useQuery<ProjectQuery>({
     queryKey: ['project', id],
-    queryFn: () => request(endpoint, GET_PROJECT_BY_ID, { id }),
+    queryFn: () => request(GRAPHQL_ENDPOINT, GET_PROJECT_BY_ID, { id }),
     enabled: !!id,
   });
 }
@@ -47,7 +48,7 @@ export function useProject(id: string) {
 export function useService(id: string) {
   return useQuery<ServiceQuery>({
     queryKey: ['service', id],
-    queryFn: () => request(endpoint, GET_SERVICE, { id }),
+    queryFn: () => request(GRAPHQL_ENDPOINT, GET_SERVICE, { id }),
     enabled: !!id,
   });
 }
@@ -56,7 +57,7 @@ export function useDeploymentLogs(deploymentId: string) {
   return useQuery<DeploymentLogsQuery>({
     queryKey: ['deployment-logs', deploymentId],
     queryFn: () =>
-      request(endpoint, GET_DEPLOYMENT_LOGS, {
+      request(GRAPHQL_ENDPOINT, GET_DEPLOYMENT_LOGS, {
         deploymentId,
         limit: 100,
       }),
@@ -73,7 +74,7 @@ export function useDeployService() {
     Error,
     ServiceInstanceDeployMutationVariables
   >({
-    mutationFn: (variables) => request(endpoint, DEPLOY_SERVICE, variables),
+    mutationFn: (variables) => request(GRAPHQL_ENDPOINT, DEPLOY_SERVICE, variables),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['projects'] });
     },
@@ -88,7 +89,7 @@ export function useStopDeployment() {
     Error,
     DeploymentStopMutationVariables
   >({
-    mutationFn: (variables) => request(endpoint, STOP_DEPLOYMENT, variables),
+    mutationFn: (variables) => request(GRAPHQL_ENDPOINT, STOP_DEPLOYMENT, variables),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['projects'] });
     },
@@ -103,7 +104,7 @@ export function useRestartDeployment() {
     Error,
     DeploymentRestartMutationVariables
   >({
-    mutationFn: (variables) => request(endpoint, RESTART_DEPLOYMENT, variables),
+    mutationFn: (variables) => request(GRAPHQL_ENDPOINT, RESTART_DEPLOYMENT, variables),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['projects'] });
     },
@@ -118,9 +119,10 @@ export function useScaleService() {
     Error,
     ServiceInstanceUpdateMutationVariables
   >({
-    mutationFn: (variables) => request(endpoint, SCALE_SERVICE, variables),
+    mutationFn: (variables) => request(GRAPHQL_ENDPOINT, SCALE_SERVICE, variables),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['projects'] });
     },
   });
 }
+ 

@@ -1,7 +1,7 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import { useProject } from '@/lib/network/railway';
+import { useProject, useScaleService } from '@/lib/network/railway';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -10,15 +10,14 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Clock,
-  Server,
   Activity,
   AlertCircle,
   CheckCircle2,
   RefreshCcw,
-  Pause,
-  Play,
   Globe,
   Layers,
+  Minus,
+  Plus,
 } from 'lucide-react';
 import { formatDistanceToNow, format } from 'date-fns';
 import { useFragment, FragmentType } from '@/lib/network/gql';
@@ -62,12 +61,33 @@ const DeploymentStatus = (props: {
 
 const ServiceInstance = (props: {
   instance: FragmentType<typeof ServiceInstanceFragment>;
+  environmentId: string;
 }) => {
   const instance = useFragment(ServiceInstanceFragment, props.instance);
+  const scaleService = useScaleService();
 
   if (!instance.latestDeployment) {
     return null;
   }
+
+  const handleScale = async (delta: number) => {
+    const currentReplicas = instance.numReplicas || 0;
+    const newReplicas = Math.max(0, currentReplicas + delta); // Prevent negative replicas
+
+    try {
+      await scaleService.mutateAsync({
+        serviceId: instance.serviceId,
+        environmentId: props.environmentId,
+        input: {
+          numReplicas: newReplicas,
+        },
+      });
+    } catch (error) {
+      console.error('Failed to scale service:', error);
+    }
+  };
+
+  const isLoading = scaleService.isPending;
 
   return (
     <div className="space-y-4">
@@ -86,18 +106,44 @@ const ServiceInstance = (props: {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 text-sm text-gray-600">
           <Layers className="h-4 w-4" />
-          {instance.numReplicas || 1} replica(s)
+          Replicas
         </div>
-        {instance.healthcheckPath && (
-          <div className="flex items-center gap-2 text-sm text-gray-600 justify-end">
-            <CheckCircle2 className="h-4 w-4" />
-            Health: {instance.healthcheckPath}
-          </div>
-        )}
+        <div className="flex items-center gap-2">
+          <Button
+            size="sm"
+            variant="outline"
+            disabled={isLoading || instance.numReplicas === 0}
+            onClick={() => handleScale(-1)}
+          >
+            <Minus className="h-4 w-4" />
+          </Button>
+          <span className="min-w-[3ch] text-center">
+            {isLoading ? (
+              <span className="animate-pulse">...</span>
+            ) : (
+              instance.numReplicas || 0
+            )}
+          </span>
+          <Button
+            size="sm"
+            variant="outline"
+            disabled={isLoading}
+            onClick={() => handleScale(1)}
+          >
+            <Plus className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
+
+      {instance.healthcheckPath && (
+        <div className="flex items-center gap-2 text-sm text-gray-600">
+          <CheckCircle2 className="h-4 w-4" />
+          Health: {instance.healthcheckPath}
+        </div>
+      )}
 
       {instance.latestDeployment.url && (
         <div className="flex items-center gap-2 text-sm">
@@ -113,22 +159,9 @@ const ServiceInstance = (props: {
       )}
 
       <div className="flex gap-2">
-        <Button size="sm" variant="outline">
+        <Button size="sm" variant="outline" disabled={isLoading}>
           <RefreshCcw className="mr-2 h-4 w-4" />
           Redeploy
-        </Button>
-        <Button size="sm" variant="outline">
-          {instance.latestDeployment.status === 'SUCCESS' ? (
-            <>
-              <Pause className="mr-2 h-4 w-4" />
-              Stop
-            </>
-          ) : (
-            <>
-              <Play className="mr-2 h-4 w-4" />
-              Start
-            </>
-          )}
         </Button>
       </div>
     </div>
@@ -137,6 +170,7 @@ const ServiceInstance = (props: {
 
 const ServiceCard = (props: {
   service: FragmentType<typeof ServiceFragment>;
+  environmentId: string;
 }) => {
   const service = useFragment(ServiceFragment, props.service);
   const firstInstance = service.serviceInstances.edges[0]?.node;
@@ -159,7 +193,10 @@ const ServiceCard = (props: {
       </CardHeader>
       <CardContent>
         {firstInstance ? (
-          <ServiceInstance instance={firstInstance} />
+          <ServiceInstance
+            instance={firstInstance}
+            environmentId={props.environmentId}
+          />
         ) : (
           <Alert>
             <AlertCircle className="h-4 w-4" />
@@ -263,6 +300,20 @@ const ProjectDashboard = (props: {
   const project = useFragment(ProjectFragment, props.project);
   const services = project.services.edges;
 
+  // Get the first environment as default
+  const defaultEnvironment = project.environments.edges[0]?.node;
+
+  if (!defaultEnvironment) {
+    return (
+      <Alert>
+        <AlertCircle className="h-4 w-4" />
+        <AlertDescription>
+          No environments found in this project
+        </AlertDescription>
+      </Alert>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -272,10 +323,11 @@ const ProjectDashboard = (props: {
             <p className="text-gray-500 mt-1">{project.description}</p>
           )}
         </div>
-        <Button>
-          <Server className="mr-2 h-4 w-4" />
-          New Service
-        </Button>
+        <div className="flex items-center gap-2">
+          <Badge variant="outline">
+            Environment: {defaultEnvironment.name}
+          </Badge>
+        </div>
       </div>
 
       <ProjectStats project={props.project} />
@@ -291,7 +343,11 @@ const ProjectDashboard = (props: {
         <ScrollArea className="h-[500px] pr-4">
           {services.length > 0 ? (
             services.map(({ node: service }) => (
-              <ServiceCard key={service.id} service={service} />
+              <ServiceCard
+                key={service.id}
+                service={service}
+                environmentId={defaultEnvironment.id}
+              />
             ))
           ) : (
             <Alert>
@@ -314,7 +370,7 @@ export default function DynamicPage() {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto py-8 space-y-4">
+      <div className="container mx-auto p-8 space-y-4">
         <Skeleton className="h-12 w-[300px]" />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Skeleton className="h-[200px]" />
@@ -327,7 +383,7 @@ export default function DynamicPage() {
 
   if (error) {
     return (
-      <div className="container mx-auto py-8">
+      <div className="container mx-auto p-8">
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>
@@ -340,7 +396,7 @@ export default function DynamicPage() {
 
   if (!data?.project) {
     return (
-      <div className="container mx-auto py-8">
+      <div className="container mx-auto p-8">
         <Alert>
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>No project found with ID: {id}</AlertDescription>
@@ -350,7 +406,7 @@ export default function DynamicPage() {
   }
 
   return (
-    <div className="container mx-auto py-8">
+    <div className="container mx-auto p-8">
       <ProjectDashboard project={data.project} />
     </div>
   );
