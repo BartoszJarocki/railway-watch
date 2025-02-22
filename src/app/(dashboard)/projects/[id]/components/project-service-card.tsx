@@ -8,10 +8,9 @@ import { ProjectServiceInstance } from './project-service-instance';
 
 export const ProjectServiceCard = (props: {
   service: FragmentType<typeof ServiceFragment>;
-  environmentId: string;
 }) => {
   const service = useFragment(ServiceFragment, props.service);
-  const firstInstance = service.serviceInstances.edges[0]?.node;
+  const instances = service.serviceInstances.edges;
   const deploymentsCount = service.deployments.edges.length;
 
   return (
@@ -25,18 +24,29 @@ export const ProjectServiceCard = (props: {
             {deploymentsCount} deployment{deploymentsCount !== 1 ? 's' : ''}
           </p>
         </div>
-        {firstInstance?.latestDeployment && (
-          <ProjectDeploymentStatus
-            deployment={firstInstance.latestDeployment}
-          />
-        )}
       </CardHeader>
       <CardContent>
-        {firstInstance ? (
-          <ProjectServiceInstance
-            instance={firstInstance}
-            environmentId={props.environmentId}
-          />
+        {instances.length > 0 ? (
+          <div className="space-y-4">
+            {instances.map(({ node: instance }, index) => (
+              <div
+                key={instance.id}
+                className={index > 0 ? 'border-t pt-4' : ''}
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-sm font-medium">
+                    Instance {index + 1}
+                  </span>
+                  {instance.latestDeployment && (
+                    <ProjectDeploymentStatus
+                      deployment={instance.latestDeployment}
+                    />
+                  )}
+                </div>
+                <ProjectServiceInstance instance={instance} />
+              </div>
+            ))}
+          </div>
         ) : (
           <Alert>
             <AlertCircle className="h-4 w-4" />

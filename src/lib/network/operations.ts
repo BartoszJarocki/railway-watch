@@ -40,6 +40,7 @@ export const ServiceFragment = graphql(`
     serviceInstances {
       edges {
         node {
+          id
           latestDeployment {
             ...DeploymentItem
           }
@@ -81,6 +82,7 @@ export const ProjectFragment = graphql(`
             edges {
               node {
                 id
+                environmentId
                 latestDeployment {
                   status
                   ...DeploymentItem

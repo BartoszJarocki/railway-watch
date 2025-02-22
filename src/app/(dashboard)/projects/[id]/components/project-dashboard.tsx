@@ -1,6 +1,5 @@
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { AlertCircle } from 'lucide-react';
 import { useFragment, FragmentType } from '@/lib/network/gql';
 import { ProjectFragment } from '@/lib/network/operations';
@@ -53,25 +52,19 @@ export const ProjectDashboard = (props: {
           </Badge>
         </div>
 
-        <ScrollArea className="h-[500px] pr-4">
-          {services.length > 0 ? (
-            services.map(({ node: service }) => (
-              <ProjectServiceCard
-                key={service.id}
-                service={service}
-                environmentId={defaultEnvironment.id}
-              />
-            ))
-          ) : (
-            <Alert>
-              <AlertCircle className="h-4 w-4" />
-              <AlertDescription>
-                No services found in this project. Create a new service to get
-                started.
-              </AlertDescription>
-            </Alert>
-          )}
-        </ScrollArea>
+        {services.length > 0 ? (
+          services.map(({ node: service }) => (
+            <ProjectServiceCard key={service.id} service={service} />
+          ))
+        ) : (
+          <Alert>
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>
+              No services found in this project. Create a new service to get
+              started.
+            </AlertDescription>
+          </Alert>
+        )}
       </div>
     </div>
   );

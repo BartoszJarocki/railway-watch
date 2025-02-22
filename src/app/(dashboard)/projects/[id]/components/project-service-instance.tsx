@@ -15,7 +15,6 @@ import {
 
 export const ProjectServiceInstance = (props: {
   instance: FragmentType<typeof ServiceInstanceFragment>;
-  environmentId: string;
 }) => {
   const instance = useFragment(ServiceInstanceFragment, props.instance);
   const scaleServiceMutation = useScaleService();
@@ -32,7 +31,7 @@ export const ProjectServiceInstance = (props: {
 
     scaleServiceMutation.mutate({
       serviceId: instance.serviceId,
-      environmentId: props.environmentId,
+      environmentId: instance.environmentId,
       input: {
         numReplicas: newReplicas,
       },
