@@ -16,6 +16,7 @@ export const ServiceInstanceFragment = graphql(`
     id
     environmentId
     latestDeployment {
+      id
       createdAt
       url
       status
