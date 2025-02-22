@@ -6,6 +6,7 @@ const ALLOWED_OPERATIONS = [
   'project',
   'serviceInstanceUpdate',
   'serviceInstanceDeploy',
+  'deploymentRestart',
 ] as const;
 
 export async function POST(request: NextRequest) {

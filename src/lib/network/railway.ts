@@ -16,6 +16,9 @@ import {
   ServiceInstanceUpdateMutation,
   ServiceInstanceUpdateMutationVariables,
   ProjectQuery,
+  ProjectQueryVariables,
+  ServiceQueryVariables,
+  DeploymentLogsQueryVariables,
 } from './gql/graphql';
 import {
   GET_PROJECTS,
@@ -28,7 +31,10 @@ import {
   GET_PROJECT_BY_ID,
 } from './operations';
 
-export const GRAPHQL_ENDPOINT = `${window.location.origin}/api/graphql`;
+export const GRAPHQL_ENDPOINT =
+  typeof window !== 'undefined'
+    ? `${window.location.origin}/api/graphql`
+    : 'http://localhost:3000/api/graphql';
 
 export function useProjects(variables: ProjectsQueryVariables) {
   return useQuery<ProjectsQuery>({
@@ -37,32 +43,31 @@ export function useProjects(variables: ProjectsQueryVariables) {
   });
 }
 
-export function useProject(id: string) {
+export function useProject(variables: ProjectQueryVariables) {
   return useQuery<ProjectQuery>({
-    queryKey: ['project', id],
-    queryFn: () => request(GRAPHQL_ENDPOINT, GET_PROJECT_BY_ID, { id }),
-    enabled: !!id,
+    queryKey: ['project', variables.id],
+    queryFn: () => request(GRAPHQL_ENDPOINT, GET_PROJECT_BY_ID, variables),
+    enabled: !!variables.id,
   });
 }
 
-export function useService(id: string) {
+export function useService(variables: ServiceQueryVariables) {
   return useQuery<ServiceQuery>({
-    queryKey: ['service', id],
-    queryFn: () => request(GRAPHQL_ENDPOINT, GET_SERVICE, { id }),
-    enabled: !!id,
+    queryKey: ['service', variables.id],
+    queryFn: () => request(GRAPHQL_ENDPOINT, GET_SERVICE, variables),
+    enabled: !!variables.id,
   });
 }
 
-export function useDeploymentLogs(deploymentId: string) {
+export function useDeploymentLogs(
+  variables: DeploymentLogsQueryVariables,
+  refetchInterval: number = 5000
+) {
   return useQuery<DeploymentLogsQuery>({
-    queryKey: ['deployment-logs', deploymentId],
-    queryFn: () =>
-      request(GRAPHQL_ENDPOINT, GET_DEPLOYMENT_LOGS, {
-        deploymentId,
-        limit: 100,
-      }),
-    enabled: !!deploymentId,
-    refetchInterval: 5000,
+    queryKey: ['deployment-logs', variables.deploymentId],
+    queryFn: () => request(GRAPHQL_ENDPOINT, GET_DEPLOYMENT_LOGS, variables),
+    enabled: !!variables.deploymentId,
+    refetchInterval,
   });
 }
 
@@ -74,9 +79,10 @@ export function useDeployService() {
     Error,
     ServiceInstanceDeployMutationVariables
   >({
-    mutationFn: (variables) => request(GRAPHQL_ENDPOINT, DEPLOY_SERVICE, variables),
+    mutationFn: (variables) =>
+      request(GRAPHQL_ENDPOINT, DEPLOY_SERVICE, variables),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['projects'] });
+      queryClient.invalidateQueries({ queryKey: ['project'] });
     },
   });
 }
@@ -89,9 +95,10 @@ export function useStopDeployment() {
     Error,
     DeploymentStopMutationVariables
   >({
-    mutationFn: (variables) => request(GRAPHQL_ENDPOINT, STOP_DEPLOYMENT, variables),
+    mutationFn: (variables) =>
+      request(GRAPHQL_ENDPOINT, STOP_DEPLOYMENT, variables),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['projects'] });
+      queryClient.invalidateQueries({ queryKey: ['project'] });
     },
   });
 }
@@ -104,9 +111,10 @@ export function useRestartDeployment() {
     Error,
     DeploymentRestartMutationVariables
   >({
-    mutationFn: (variables) => request(GRAPHQL_ENDPOINT, RESTART_DEPLOYMENT, variables),
+    mutationFn: (variables) =>
+      request(GRAPHQL_ENDPOINT, RESTART_DEPLOYMENT, variables),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['projects'] });
+      queryClient.invalidateQueries({ queryKey: ['project'] });
     },
   });
 }
@@ -119,10 +127,10 @@ export function useScaleService() {
     Error,
     ServiceInstanceUpdateMutationVariables
   >({
-    mutationFn: (variables) => request(GRAPHQL_ENDPOINT, SCALE_SERVICE, variables),
+    mutationFn: (variables) =>
+      request(GRAPHQL_ENDPOINT, SCALE_SERVICE, variables),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['projects'] });
+      queryClient.invalidateQueries({ queryKey: ['project'] });
     },
   });
 }
- 

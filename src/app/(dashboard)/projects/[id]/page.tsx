@@ -11,7 +11,7 @@ type PageParams = Record<'id', string>;
 
 export default function ProjectPage() {
   const { id } = useParams<PageParams>();
-  const { data, isLoading, error } = useProject(id);
+  const { data, isLoading, error } = useProject({ id });
 
   if (isLoading) {
     return (

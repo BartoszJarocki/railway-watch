@@ -34,6 +34,8 @@ export const ServiceFragment = graphql(`
   fragment ServiceItem on Service {
     id
     name
+    icon
+    deletedAt
     projectId
     serviceInstances {
       edges {
