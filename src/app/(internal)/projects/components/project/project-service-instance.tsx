@@ -71,7 +71,7 @@ export const ProjectServiceInstance = (props: {
 
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-lg font-semibold">Instance</CardTitle>
-        <RailwayComponentId name="Service id" value={instance.id} />
+        <RailwayComponentId name="Instance id" value={instance.id} />
       </CardHeader>
 
       <CardContent className="space-y-4">

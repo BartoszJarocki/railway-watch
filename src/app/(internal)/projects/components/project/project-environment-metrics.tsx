@@ -48,7 +48,7 @@ export const EnvironmentMetrics = (props: {
   };
 
   return (
-    <div className="grid gap-4 md:grid-cols-2">
+    <div className="grid gap-4 md:grid-cols-2" suppressHydrationWarning>
       <Card>
         <CardHeader>
           <CardTitle>CPU Usage</CardTitle>

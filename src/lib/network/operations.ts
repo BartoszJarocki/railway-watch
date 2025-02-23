@@ -40,6 +40,7 @@ export const ServiceInstanceFragment = graphql(`
       createdAt
       url
       status
+      serviceId
       ...DeploymentItem
     }
     healthcheckPath

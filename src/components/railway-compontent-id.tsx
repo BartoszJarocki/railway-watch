@@ -28,12 +28,12 @@ export const RailwayComponentId = ({ className, name, value }: Props) => {
       <TooltipTrigger asChild>
         <button
           className={cn(
-            'text-xs font-mono text-muted-foreground hover:text-muted-foreground/80 transition-colors cursor-pointer inline-flex flex-col items-start gap-1',
+            'text-xs font-mono text-muted-foreground hover:text-muted-foreground/80 transition-colors cursor-pointer inline-flex flex-col items-start gap-1 leading-none',
             className
           )}
           onClick={handleCopy}
         >
-          <span>{name}</span>
+          <span className="text-muted-foreground/90">{name}</span>
           <span>{value}</span>
         </button>
       </TooltipTrigger>
