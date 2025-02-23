@@ -5,7 +5,7 @@ import { useProject } from '@/lib/network/railway';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
-import { ProjectDashboard } from './components/project-dashboard';
+import { ProjectDashboard } from './components/project/project-dashboard';
 
 export default function ProjectPage() {
   const params = useSearchParams();

@@ -83,9 +83,10 @@ export function ProjectSelector({ query }: { query: ProjectsQuery }) {
     })
   );
 
+  // TODO: is there a better way to make nugs show default value in the URL?
   React.useEffect(() => {
     setSelectedProjectId(defaultProjectId);
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const selectedProject = query.projects.edges.find(
     ({ node }) => node.id === selectedProjectId
