@@ -12,11 +12,14 @@ export const ProjectServiceCard = (props: {
 }) => {
   const service = useFragment(ServiceFragment, props.service);
   const environment = useFragment(EnvironmentFragment, props.environment);
-  const instances = environment.serviceInstances.edges;
+  // Filter instances to only show those belonging to this service
+  const serviceInstances = environment.serviceInstances.edges.filter(
+    ({ node }) => node.serviceId === service.id
+  );
+
   const deploymentsCount = service.deployments.edges.filter(
     ({ node }) => node.environmentId === environment.id
   ).length;
-
   return (
     <Card className="mb-4">
       <CardHeader className="flex flex-row items-center justify-between">
@@ -31,9 +34,9 @@ export const ProjectServiceCard = (props: {
         <RailwayComponentId name="Service id" value={service.id} />
       </CardHeader>
       <CardContent>
-        {instances.length > 0 ? (
+        {serviceInstances.length > 0 ? (
           <div className="flex flex-col lg:flex-row gap-5">
-            {instances.map(({ node: instance }) => (
+            {serviceInstances.map(({ node: instance }) => (
               <ProjectServiceInstance
                 className="flex-1"
                 key={instance.id}

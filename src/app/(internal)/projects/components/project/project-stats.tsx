@@ -11,7 +11,7 @@ export const ProjectStats = (props: {
 }) => {
   const project = useFragment(ProjectFragment, props.project);
   const currentEnv = useFragment(EnvironmentFragment, props.environment);
-  const services = project.services.edges;
+
   // Get services for current environment
   const servicesInEnvironment = project.services.edges.filter(({ node }) =>
     node.serviceInstances.edges.some(
