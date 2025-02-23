@@ -3,18 +3,32 @@ import { Badge } from '@/components/ui/badge';
 import { HeartPulseIcon, SquareActivityIcon } from 'lucide-react';
 import { format } from 'date-fns';
 import { useFragment, FragmentType } from '@/lib/network/gql';
-import { ProjectFragment } from '@/lib/network/operations';
+import { EnvironmentFragment, ProjectFragment } from '@/lib/network/operations';
 
 export const ProjectStats = (props: {
   project: FragmentType<typeof ProjectFragment>;
+  environment: FragmentType<typeof EnvironmentFragment>;
 }) => {
   const project = useFragment(ProjectFragment, props.project);
+  const currentEnv = useFragment(EnvironmentFragment, props.environment);
   const services = project.services.edges;
-  const activeServices = services.filter(
-    (edge) =>
-      edge.node.serviceInstances.edges[0]?.node.latestDeployment?.status ===
-      'SUCCESS'
+  // Get services for current environment
+  const servicesInEnvironment = project.services.edges.filter(({ node }) =>
+    node.serviceInstances.edges.some(
+      ({ node }) => node.environmentId === currentEnv.id
+    )
+  );
+
+  // Count active services in current environment
+  const activeServices = servicesInEnvironment.filter(({ node }) =>
+    node.serviceInstances.edges.some(
+      ({ node }) =>
+        node.environmentId === currentEnv.id &&
+        node.latestDeployment?.status === 'SUCCESS'
+    )
   ).length;
+
+  console.log('activeServices', activeServices);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -35,7 +49,9 @@ export const ProjectStats = (props: {
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">Total Services</span>
-              <span className="font-medium">{services.length}</span>
+              <span className="font-medium">
+                {servicesInEnvironment.length}
+              </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">Active Services</span>
@@ -60,7 +76,7 @@ export const ProjectStats = (props: {
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {services.map(({ node: service }) => {
+            {servicesInEnvironment.map(({ node: service }) => {
               const status =
                 service.serviceInstances.edges[0]?.node.latestDeployment
                   ?.status;

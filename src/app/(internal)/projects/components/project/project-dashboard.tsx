@@ -20,8 +20,11 @@ export const ProjectDashboard = (props: {
     'environmentId',
     parseAsString.withDefault(defaultEnvironment.id)
   );
+  const currentEnvironment = project.environments.edges.find(
+    ({ node }) => node.id === environmentId
+  );
 
-  if (!defaultEnvironment) {
+  if (!defaultEnvironment || !currentEnvironment) {
     return (
       <Alert>
         <AlertCircle className="h-4 w-4" />
@@ -51,7 +54,10 @@ export const ProjectDashboard = (props: {
           <RailwayComponentId name="Environment id" value={environmentId} />
         </div>
 
-        <ProjectStats project={props.project} />
+        <ProjectStats
+          project={props.project}
+          environment={currentEnvironment.node}
+        />
 
         {project.environments.edges.map(({ node: currentEnv }) => (
           <TabsContent key={currentEnv.id} value={currentEnv.id}>
@@ -68,7 +74,7 @@ export const ProjectDashboard = (props: {
                 <div className="grid gap-4">
                   {project.services.edges
                     .filter(({ node }) =>
-                      node.serviceInstances.edges.filter(
+                      node.serviceInstances.edges.some(
                         ({ node }) => node.environmentId === currentEnv.id
                       )
                     )
