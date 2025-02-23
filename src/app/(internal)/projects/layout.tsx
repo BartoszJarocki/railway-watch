@@ -12,7 +12,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="divide-y">
       <header>
-        <div className="h-16 container mx-auto px-8 flex items-center justify-between">
+        <div className="h-16 container mx-auto px-3 md:px-6 flex items-center justify-between">
           {isLoading ? <ProjectSelectorSkeleton /> : null}
           {error ? <div>Error loading projects: {error.message}</div> : null}
           {data ? <ProjectSelector query={data} /> : null}
@@ -21,7 +21,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </div>
       </header>
 
-      <div className="container mx-auto p-8">{children}</div>
+      <div className="container mx-auto p-3 md:p-6">{children}</div>
     </div>
   );
 }

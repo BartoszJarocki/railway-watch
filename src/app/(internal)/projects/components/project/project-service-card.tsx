@@ -32,7 +32,7 @@ export const ProjectServiceCard = (props: {
       </CardHeader>
       <CardContent>
         {instances.length > 0 ? (
-          <div className="flex gap-2">
+          <div className="flex flex-col lg:flex-row gap-5">
             {instances.map(({ node: instance }) => (
               <ProjectServiceInstance
                 className="flex-1"

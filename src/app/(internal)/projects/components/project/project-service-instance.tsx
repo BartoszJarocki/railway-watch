@@ -12,9 +12,16 @@ import {
   RefreshCcw,
   CheckCircle2,
 } from 'lucide-react';
-import { Card, CardContent } from '../../../../../components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '../../../../../components/ui/card';
 import { ProjectDeploymentStatus } from './project-deployment-status';
 import { RailwayComponentId } from '../../../../../components/railway-compontent-id';
+import { cn } from '../../../../../lib/utils';
+import { Badge } from '../../../../../components/ui/badge';
 
 export const ProjectServiceInstance = (props: {
   className?: string;
@@ -53,21 +60,21 @@ export const ProjectServiceInstance = (props: {
   const isLoading = scaleServiceMutation.isPending;
 
   return (
-    <Card className={className}>
+    <Card className={cn('relative', className)}>
+      <Badge
+        className="flex items-center gap-1 justify-end text-xs absolute -top-3 right-4 bg-background"
+        variant="outline"
+      >
+        <Globe className="size-3" />
+        {instance.region || 'Region unknown'}
+      </Badge>
+
+      <CardHeader className="flex flex-row items-center justify-between">
+        <CardTitle className="text-lg font-semibold">Instance</CardTitle>
+        <RailwayComponentId name="Service id" value={instance.id} />
+      </CardHeader>
+
       <CardContent className="space-y-4">
-        <div className="flex items-center justify-between mb-3">
-          <div>
-            <h3 className="text-sm font-medium">Instance</h3>
-
-            <div className="flex items-center gap-1 text-gray-600 justify-end text-xs">
-              <Globe className="size-3" />
-              {instance.region || 'No region'}
-            </div>
-          </div>
-
-          <RailwayComponentId name="Instance id" value={instance.id} />
-        </div>
-
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-sm text-gray-600">
             <Clock className="h-4 w-4" />
