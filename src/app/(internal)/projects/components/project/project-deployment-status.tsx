@@ -26,7 +26,7 @@ export const ProjectDeploymentStatus = (props: {
       variant="secondary"
       className={`${getStatusColor(deployment.status)} text-white`}
     >
-      {deployment.status}
+      {deployment.status.toLowerCase()}
     </Badge>
   );
 };

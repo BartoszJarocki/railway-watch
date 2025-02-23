@@ -3,8 +3,8 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
 import { useFragment, FragmentType } from '@/lib/network/gql';
 import { EnvironmentFragment, ServiceFragment } from '@/lib/network/operations';
-import { ProjectDeploymentStatus } from './project-deployment-status';
 import { ProjectServiceInstance } from './project-service-instance';
+import { RailwayComponentId } from '../../../../../components/railway-compontent-id';
 
 export const ProjectServiceCard = (props: {
   service: FragmentType<typeof ServiceFragment>;
@@ -28,27 +28,17 @@ export const ProjectServiceCard = (props: {
             {deploymentsCount} deployment{deploymentsCount !== 1 ? 's' : ''}
           </p>
         </div>
+        <RailwayComponentId name="Service id" value={service.id} />
       </CardHeader>
       <CardContent>
         {instances.length > 0 ? (
-          <div className="space-y-4">
-            {instances.map(({ node: instance }, index) => (
-              <div
+          <div className="flex gap-2">
+            {instances.map(({ node: instance }) => (
+              <ProjectServiceInstance
+                className="flex-1"
                 key={instance.id}
-                className={index > 0 ? 'border-t pt-4' : ''}
-              >
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-sm font-medium">
-                    Instance {index + 1}
-                  </span>
-                  {instance.latestDeployment && (
-                    <ProjectDeploymentStatus
-                      deployment={instance.latestDeployment}
-                    />
-                  )}
-                </div>
-                <ProjectServiceInstance instance={instance} />
-              </div>
+                instance={instance}
+              />
             ))}
           </div>
         ) : (

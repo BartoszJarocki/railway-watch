@@ -21,7 +21,7 @@ export const ProjectStats = (props: {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center justify-between gap-2">
-            Project Overview
+            Overview
             <SquareActivityIcon className="h-4 w-4" />
           </CardTitle>
         </CardHeader>
@@ -54,7 +54,7 @@ export const ProjectStats = (props: {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center justify-between gap-2">
-            Health Status
+            Health
             <HeartPulseIcon className="h-4 w-4" />
           </CardTitle>
         </CardHeader>
