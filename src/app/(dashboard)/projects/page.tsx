@@ -12,7 +12,7 @@ export default function ProjectPage() {
   const projectId = params.get('projectId')!;
   const { data, isLoading, error } = useProject({ id: projectId });
 
-  if (isLoading) {
+  if (isLoading || !projectId) {
     return (
       <div className="space-y-4">
         <Skeleton className="h-12 w-[300px]" />

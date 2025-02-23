@@ -28,8 +28,9 @@ import {
   AvatarFallback,
   AvatarImage,
 } from '../../../components/ui/avatar';
+import { NavMenu } from './components/nav/nav-menu';
 
-const ProjectsDropdownSkeleton = () => {
+const ProjectSelectorSkeleton = () => {
   return (
     <div className={cn('flex w-[200px] justify-between gap-2')}>
       <Skeleton className="h-5 w-5 rounded-full" />
@@ -51,7 +52,7 @@ const ProjectItem = (props: {
       onSelect={() => {
         props.onProjectIdSelected(project.id);
       }}
-      className="text-sm"
+      className="text-sm font-mono"
     >
       <Avatar className="mr-2 h-5 w-5">
         <AvatarImage
@@ -72,14 +73,19 @@ const ProjectItem = (props: {
   );
 };
 
-export function NavProjects({ query }: { query: ProjectsQuery }) {
+export function ProjectSelector({ query }: { query: ProjectsQuery }) {
   const [open, setOpen] = React.useState(false);
+  const defaultProjectId = query.projects.edges[0]?.node.id;
   const [selectedProjectId, setSelectedProjectId] = useQueryState(
     'projectId',
-    parseAsString.withDefault(query.projects.edges[0]?.node.id).withOptions({
+    parseAsString.withDefault(defaultProjectId).withOptions({
       clearOnDefault: false,
     })
   );
+
+  React.useEffect(() => {
+    setSelectedProjectId(defaultProjectId);
+  }, []);
 
   const selectedProject = query.projects.edges.find(
     ({ node }) => node.id === selectedProjectId
@@ -113,7 +119,7 @@ export function NavProjects({ query }: { query: ProjectsQuery }) {
       <PopoverContent className="w-[200px] p-0">
         <Command>
           <CommandInput placeholder="Search team..." />
-          <CommandList>
+          <CommandList className="p-1">
             <CommandEmpty>No projects found.</CommandEmpty>
 
             {query.projects.edges.map(({ node }) => (
@@ -139,11 +145,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="divide-y">
-      <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
-        <div className="container mx-auto px-8">
-          {isLoading ? <ProjectsDropdownSkeleton /> : null}
+      <header>
+        <div className="h-16 container mx-auto px-8 flex items-center justify-between">
+          {isLoading ? <ProjectSelectorSkeleton /> : null}
           {error ? <div>Error loading projects: {error.message}</div> : null}
-          {data ? <NavProjects query={data} /> : null}
+          {data ? <ProjectSelector query={data} /> : null}
+
+          <NavMenu />
         </div>
       </header>
 
