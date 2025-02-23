@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Activity, CheckCircle2 } from 'lucide-react';
+import { HeartPulseIcon, SquareActivityIcon } from 'lucide-react';
 import { format } from 'date-fns';
 import { useFragment, FragmentType } from '@/lib/network/gql';
 import { ProjectFragment } from '@/lib/network/operations';
@@ -20,9 +20,9 @@ export const ProjectStats = (props: {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Activity className="h-5 w-5" />
+          <CardTitle className="flex items-center justify-between gap-2">
             Project Overview
+            <SquareActivityIcon className="h-4 w-4" />
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -53,9 +53,9 @@ export const ProjectStats = (props: {
 
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <CheckCircle2 className="h-5 w-5" />
+          <CardTitle className="flex items-center justify-between gap-2">
             Health Status
+            <HeartPulseIcon className="h-4 w-4" />
           </CardTitle>
         </CardHeader>
         <CardContent>

@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { useFragment, FragmentType } from '@/lib/network/gql';
 import { ServiceInstanceFragment } from '@/lib/network/operations';
-import { useScaleService, useRestartDeployment } from '@/lib/network/railway';
+import { useUpdateService, useRestartDeployment } from '@/lib/network/railway';
 import { formatDistanceToNow } from 'date-fns';
 import {
   Clock,
@@ -17,7 +17,7 @@ export const ProjectServiceInstance = (props: {
   instance: FragmentType<typeof ServiceInstanceFragment>;
 }) => {
   const instance = useFragment(ServiceInstanceFragment, props.instance);
-  const scaleServiceMutation = useScaleService();
+  const scaleServiceMutation = useUpdateService();
   const restartDeploymentMutation = useRestartDeployment();
 
   const latestDeployment = instance.latestDeployment;
@@ -27,13 +27,13 @@ export const ProjectServiceInstance = (props: {
 
   const handleScale = async (delta: number) => {
     const currentReplicas = instance.numReplicas || 0;
-    const newReplicas = Math.max(0, currentReplicas + delta);
+    const numReplicas = Math.max(0, currentReplicas + delta);
 
     scaleServiceMutation.mutate({
       serviceId: instance.serviceId,
       environmentId: instance.environmentId,
       input: {
-        numReplicas: newReplicas,
+        numReplicas,
       },
     });
   };

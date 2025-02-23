@@ -30,6 +30,7 @@ import {
   SCALE_SERVICE,
   GET_PROJECT_BY_ID,
 } from './operations';
+import { toast } from 'sonner';
 
 export const GRAPHQL_ENDPOINT =
   typeof window !== 'undefined'
@@ -119,7 +120,7 @@ export function useRestartDeployment() {
   });
 }
 
-export function useScaleService() {
+export function useUpdateService() {
   const queryClient = useQueryClient();
 
   return useMutation<
@@ -129,8 +130,30 @@ export function useScaleService() {
   >({
     mutationFn: (variables) =>
       request(GRAPHQL_ENDPOINT, SCALE_SERVICE, variables),
-    onSuccess: () => {
+
+    onError: (error) => {
+      toast.error('Failed to scale service', {
+        description: JSON.stringify(error, null, 2),
+
+        action: {
+          label: 'Copy',
+          onClick: () => {
+            try {
+              navigator.clipboard.writeText(JSON.stringify(error, null, 2));
+              toast('Error message copied to clipboard');
+            } catch (error) {
+              console.error('Failed to copy error message', error);
+            }
+          },
+        },
+      });
+    },
+    onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['project'] });
+
+      toast('Instance scaled successfully', {
+        description: `Current instance count: ${variables.input.numReplicas}`,
+      });
     },
   });
 }
