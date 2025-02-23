@@ -13,7 +13,9 @@ export const ProjectServiceCard = (props: {
   const service = useFragment(ServiceFragment, props.service);
   const environment = useFragment(EnvironmentFragment, props.environment);
   const instances = environment.serviceInstances.edges;
-  const deploymentsCount = service.deployments.edges.length;
+  const deploymentsCount = service.deployments.edges.filter(
+    ({ node }) => node.environmentId === environment.id
+  ).length;
 
   return (
     <Card className="mb-4">

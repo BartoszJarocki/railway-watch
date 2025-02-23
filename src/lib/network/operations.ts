@@ -57,21 +57,11 @@ export const ServiceFragment = graphql(`
     icon
     deletedAt
     projectId
-    serviceInstances {
-      edges {
-        node {
-          id
-          environmentId
-          latestDeployment {
-            ...DeploymentItem
-          }
-          ...ServiceInstanceItem
-        }
-      }
-    }
     deployments {
       edges {
         node {
+          url
+          environmentId
           ...DeploymentItem
         }
       }
