@@ -19,6 +19,8 @@ import {
   ProjectQueryVariables,
   ServiceQueryVariables,
   DeploymentLogsQueryVariables,
+  GetEnvironmentMetricsQueryVariables,
+  GetEnvironmentMetricsQuery,
 } from './gql/graphql';
 import {
   GET_PROJECTS,
@@ -29,6 +31,7 @@ import {
   RESTART_DEPLOYMENT,
   SCALE_SERVICE,
   GET_PROJECT_BY_ID,
+  GET_ENVIRONMENT_METRICS,
 } from './operations';
 import { toast } from 'sonner';
 
@@ -155,5 +158,17 @@ export function useUpdateService() {
         description: `Current instance count: ${variables.input.numReplicas}`,
       });
     },
+  });
+}
+
+export function useMetrics(
+  variables: GetEnvironmentMetricsQueryVariables,
+  refetchInterval: number = 5 * 60000 // 5 min
+) {
+  return useQuery<GetEnvironmentMetricsQuery>({
+    queryKey: ['metrics', variables],
+    queryFn: () =>
+      request(GRAPHQL_ENDPOINT, GET_ENVIRONMENT_METRICS, variables),
+    refetchInterval,
   });
 }

@@ -28,6 +28,7 @@ type Documents = {
     "\n  query deploymentLogs($deploymentId: String!, $limit: Int) {\n    deploymentLogs(deploymentId: $deploymentId, limit: $limit) {\n      message\n      timestamp\n      severity\n    }\n  }\n": typeof types.DeploymentLogsDocument,
     "\n  mutation deploymentStop($id: String!) {\n    deploymentStop(id: $id)\n  }\n": typeof types.DeploymentStopDocument,
     "\n  mutation deploymentRestart($id: String!) {\n    deploymentRestart(id: $id)\n  }\n": typeof types.DeploymentRestartDocument,
+    "\n  query getEnvironmentMetrics(\n    $environmentId: String!\n    $startDate: DateTime!\n    $measurements: [MetricMeasurement!]!\n  ) {\n    metrics(\n      environmentId: $environmentId\n      startDate: $startDate\n      measurements: $measurements\n    ) {\n      measurement\n      values {\n        ts\n        value\n      }\n      tags {\n        serviceId\n      }\n    }\n  }\n": typeof types.GetEnvironmentMetricsDocument,
 };
 const documents: Documents = {
     "\n  fragment EnvironmentItem on Environment {\n    id\n    name\n    serviceInstances {\n      edges {\n        node {\n          id\n          serviceName\n          serviceId\n          latestDeployment {\n            ...DeploymentItem\n          }\n          ...ServiceInstanceItem\n        }\n      }\n    }\n  }\n": types.EnvironmentItemFragmentDoc,
@@ -44,6 +45,7 @@ const documents: Documents = {
     "\n  query deploymentLogs($deploymentId: String!, $limit: Int) {\n    deploymentLogs(deploymentId: $deploymentId, limit: $limit) {\n      message\n      timestamp\n      severity\n    }\n  }\n": types.DeploymentLogsDocument,
     "\n  mutation deploymentStop($id: String!) {\n    deploymentStop(id: $id)\n  }\n": types.DeploymentStopDocument,
     "\n  mutation deploymentRestart($id: String!) {\n    deploymentRestart(id: $id)\n  }\n": types.DeploymentRestartDocument,
+    "\n  query getEnvironmentMetrics(\n    $environmentId: String!\n    $startDate: DateTime!\n    $measurements: [MetricMeasurement!]!\n  ) {\n    metrics(\n      environmentId: $environmentId\n      startDate: $startDate\n      measurements: $measurements\n    ) {\n      measurement\n      values {\n        ts\n        value\n      }\n      tags {\n        serviceId\n      }\n    }\n  }\n": types.GetEnvironmentMetricsDocument,
 };
 
 /**
@@ -116,6 +118,10 @@ export function graphql(source: "\n  mutation deploymentStop($id: String!) {\n  
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  mutation deploymentRestart($id: String!) {\n    deploymentRestart(id: $id)\n  }\n"): (typeof documents)["\n  mutation deploymentRestart($id: String!) {\n    deploymentRestart(id: $id)\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query getEnvironmentMetrics(\n    $environmentId: String!\n    $startDate: DateTime!\n    $measurements: [MetricMeasurement!]!\n  ) {\n    metrics(\n      environmentId: $environmentId\n      startDate: $startDate\n      measurements: $measurements\n    ) {\n      measurement\n      values {\n        ts\n        value\n      }\n      tags {\n        serviceId\n      }\n    }\n  }\n"): (typeof documents)["\n  query getEnvironmentMetrics(\n    $environmentId: String!\n    $startDate: DateTime!\n    $measurements: [MetricMeasurement!]!\n  ) {\n    metrics(\n      environmentId: $environmentId\n      startDate: $startDate\n      measurements: $measurements\n    ) {\n      measurement\n      values {\n        ts\n        value\n      }\n      tags {\n        serviceId\n      }\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

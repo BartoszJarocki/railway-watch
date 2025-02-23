@@ -213,3 +213,26 @@ export const RESTART_DEPLOYMENT = graphql(`
     deploymentRestart(id: $id)
   }
 `);
+
+export const GET_ENVIRONMENT_METRICS = graphql(`
+  query getEnvironmentMetrics(
+    $environmentId: String!
+    $startDate: DateTime!
+    $measurements: [MetricMeasurement!]!
+  ) {
+    metrics(
+      environmentId: $environmentId
+      startDate: $startDate
+      measurements: $measurements
+    ) {
+      measurement
+      values {
+        ts
+        value
+      }
+      tags {
+        serviceId
+      }
+    }
+  }
+`);
