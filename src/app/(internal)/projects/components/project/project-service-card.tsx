@@ -5,6 +5,8 @@ import { useFragment, FragmentType } from '@/lib/network/gql';
 import { EnvironmentFragment, ServiceFragment } from '@/lib/network/operations';
 import { ProjectServiceInstance } from './project-service-instance';
 import { RailwayComponentId } from '../../../../../components/railway-compontent-id';
+import { useRedeployService } from '../../../../../lib/network/railway';
+import { Button } from '../../../../../components/ui/button';
 
 export const ProjectServiceCard = (props: {
   service: FragmentType<typeof ServiceFragment>;
@@ -16,12 +18,21 @@ export const ProjectServiceCard = (props: {
   const serviceInstances = environment.serviceInstances.edges.filter(
     ({ node }) => node.serviceId === service.id
   );
-
   const deploymentsCount = service.deployments.edges.filter(
     ({ node }) => node.environmentId === environment.id
   ).length;
+
+  const redeployServiceMutation = useRedeployService(service.projectId);
+
+  const handleRedeployService = () => {
+    redeployServiceMutation.mutate({
+      serviceId: service.id,
+      environmentId: environment.id,
+    });
+  };
+
   return (
-    <Card className="mb-4">
+    <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <div>
           <CardTitle className="text-lg font-semibold">
@@ -30,6 +41,10 @@ export const ProjectServiceCard = (props: {
           <p className="text-sm text-gray-500">
             {deploymentsCount} deployment{deploymentsCount !== 1 ? 's' : ''}
           </p>
+
+          <Button onClick={handleRedeployService} size="sm">
+            Trigger deployment
+          </Button>
         </div>
         <RailwayComponentId name="Service id" value={service.id} />
       </CardHeader>
@@ -41,6 +56,7 @@ export const ProjectServiceCard = (props: {
                 className="flex-1"
                 key={instance.id}
                 instance={instance}
+                projectId={service.projectId}
               />
             ))}
           </div>

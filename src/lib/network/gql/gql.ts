@@ -22,9 +22,7 @@ type Documents = {
     "\n  mutation serviceInstanceUpdate(\n    $serviceId: String!\n    $environmentId: String\n    $input: ServiceInstanceUpdateInput!\n  ) {\n    serviceInstanceUpdate(\n      serviceId: $serviceId\n      environmentId: $environmentId\n      input: $input\n    )\n  }\n": typeof types.ServiceInstanceUpdateDocument,
     "\n  query projects($after: String, $before: String, $first: Int, $last: Int) {\n    projects(after: $after, before: $before, first: $first, last: $last) {\n      edges {\n        node {\n          id\n          name\n          ...ProjectItem\n        }\n      }\n    }\n  }\n": typeof types.ProjectsDocument,
     "\n  query project($id: String!) {\n    project(id: $id) {\n      id\n      ...ProjectItem\n    }\n  }\n": typeof types.ProjectDocument,
-    "\n  query service($id: String!) {\n    service(id: $id) {\n      id\n      name\n      deployments {\n        edges {\n          node {\n            id\n            status\n            createdAt\n            url\n            staticUrl\n            suggestAddServiceDomain\n          }\n        }\n      }\n    }\n  }\n": typeof types.ServiceDocument,
-    "\n  mutation deploymentTriggerCreate($input: DeploymentTriggerCreateInput!) {\n    deploymentTriggerCreate(input: $input) {\n      id\n      projectId\n      serviceId\n      branch\n      repository\n    }\n  }\n": typeof types.DeploymentTriggerCreateDocument,
-    "\n  mutation serviceInstanceDeploy($environmentId: String!, $serviceId: String!) {\n    serviceInstanceDeploy(environmentId: $environmentId, serviceId: $serviceId)\n  }\n": typeof types.ServiceInstanceDeployDocument,
+    "\n  mutation serviceInstanceRedeploy(\n    $environmentId: String!\n    $serviceId: String!\n  ) {\n    serviceInstanceRedeploy(\n      environmentId: $environmentId\n      serviceId: $serviceId\n    )\n  }\n": typeof types.ServiceInstanceRedeployDocument,
     "\n  query deploymentLogs($deploymentId: String!, $limit: Int) {\n    deploymentLogs(deploymentId: $deploymentId, limit: $limit) {\n      message\n      timestamp\n      severity\n    }\n  }\n": typeof types.DeploymentLogsDocument,
     "\n  mutation deploymentStop($id: String!) {\n    deploymentStop(id: $id)\n  }\n": typeof types.DeploymentStopDocument,
     "\n  mutation deploymentRestart($id: String!) {\n    deploymentRestart(id: $id)\n  }\n": typeof types.DeploymentRestartDocument,
@@ -39,9 +37,7 @@ const documents: Documents = {
     "\n  mutation serviceInstanceUpdate(\n    $serviceId: String!\n    $environmentId: String\n    $input: ServiceInstanceUpdateInput!\n  ) {\n    serviceInstanceUpdate(\n      serviceId: $serviceId\n      environmentId: $environmentId\n      input: $input\n    )\n  }\n": types.ServiceInstanceUpdateDocument,
     "\n  query projects($after: String, $before: String, $first: Int, $last: Int) {\n    projects(after: $after, before: $before, first: $first, last: $last) {\n      edges {\n        node {\n          id\n          name\n          ...ProjectItem\n        }\n      }\n    }\n  }\n": types.ProjectsDocument,
     "\n  query project($id: String!) {\n    project(id: $id) {\n      id\n      ...ProjectItem\n    }\n  }\n": types.ProjectDocument,
-    "\n  query service($id: String!) {\n    service(id: $id) {\n      id\n      name\n      deployments {\n        edges {\n          node {\n            id\n            status\n            createdAt\n            url\n            staticUrl\n            suggestAddServiceDomain\n          }\n        }\n      }\n    }\n  }\n": types.ServiceDocument,
-    "\n  mutation deploymentTriggerCreate($input: DeploymentTriggerCreateInput!) {\n    deploymentTriggerCreate(input: $input) {\n      id\n      projectId\n      serviceId\n      branch\n      repository\n    }\n  }\n": types.DeploymentTriggerCreateDocument,
-    "\n  mutation serviceInstanceDeploy($environmentId: String!, $serviceId: String!) {\n    serviceInstanceDeploy(environmentId: $environmentId, serviceId: $serviceId)\n  }\n": types.ServiceInstanceDeployDocument,
+    "\n  mutation serviceInstanceRedeploy(\n    $environmentId: String!\n    $serviceId: String!\n  ) {\n    serviceInstanceRedeploy(\n      environmentId: $environmentId\n      serviceId: $serviceId\n    )\n  }\n": types.ServiceInstanceRedeployDocument,
     "\n  query deploymentLogs($deploymentId: String!, $limit: Int) {\n    deploymentLogs(deploymentId: $deploymentId, limit: $limit) {\n      message\n      timestamp\n      severity\n    }\n  }\n": types.DeploymentLogsDocument,
     "\n  mutation deploymentStop($id: String!) {\n    deploymentStop(id: $id)\n  }\n": types.DeploymentStopDocument,
     "\n  mutation deploymentRestart($id: String!) {\n    deploymentRestart(id: $id)\n  }\n": types.DeploymentRestartDocument,
@@ -97,15 +93,7 @@ export function graphql(source: "\n  query project($id: String!) {\n    project(
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query service($id: String!) {\n    service(id: $id) {\n      id\n      name\n      deployments {\n        edges {\n          node {\n            id\n            status\n            createdAt\n            url\n            staticUrl\n            suggestAddServiceDomain\n          }\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query service($id: String!) {\n    service(id: $id) {\n      id\n      name\n      deployments {\n        edges {\n          node {\n            id\n            status\n            createdAt\n            url\n            staticUrl\n            suggestAddServiceDomain\n          }\n        }\n      }\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n  mutation deploymentTriggerCreate($input: DeploymentTriggerCreateInput!) {\n    deploymentTriggerCreate(input: $input) {\n      id\n      projectId\n      serviceId\n      branch\n      repository\n    }\n  }\n"): (typeof documents)["\n  mutation deploymentTriggerCreate($input: DeploymentTriggerCreateInput!) {\n    deploymentTriggerCreate(input: $input) {\n      id\n      projectId\n      serviceId\n      branch\n      repository\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n  mutation serviceInstanceDeploy($environmentId: String!, $serviceId: String!) {\n    serviceInstanceDeploy(environmentId: $environmentId, serviceId: $serviceId)\n  }\n"): (typeof documents)["\n  mutation serviceInstanceDeploy($environmentId: String!, $serviceId: String!) {\n    serviceInstanceDeploy(environmentId: $environmentId, serviceId: $serviceId)\n  }\n"];
+export function graphql(source: "\n  mutation serviceInstanceRedeploy(\n    $environmentId: String!\n    $serviceId: String!\n  ) {\n    serviceInstanceRedeploy(\n      environmentId: $environmentId\n      serviceId: $serviceId\n    )\n  }\n"): (typeof documents)["\n  mutation serviceInstanceRedeploy(\n    $environmentId: String!\n    $serviceId: String!\n  ) {\n    serviceInstanceRedeploy(\n      environmentId: $environmentId\n      serviceId: $serviceId\n    )\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

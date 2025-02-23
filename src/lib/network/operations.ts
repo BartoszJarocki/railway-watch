@@ -154,42 +154,15 @@ export const GET_PROJECT_BY_ID = graphql(`
   }
 `);
 
-export const GET_SERVICE = graphql(`
-  query service($id: String!) {
-    service(id: $id) {
-      id
-      name
-      deployments {
-        edges {
-          node {
-            id
-            status
-            createdAt
-            url
-            staticUrl
-            suggestAddServiceDomain
-          }
-        }
-      }
-    }
-  }
-`);
-
-export const DEPLOY_TRIGGER = graphql(`
-  mutation deploymentTriggerCreate($input: DeploymentTriggerCreateInput!) {
-    deploymentTriggerCreate(input: $input) {
-      id
-      projectId
-      serviceId
-      branch
-      repository
-    }
-  }
-`);
-
-export const DEPLOY_SERVICE = graphql(`
-  mutation serviceInstanceDeploy($environmentId: String!, $serviceId: String!) {
-    serviceInstanceDeploy(environmentId: $environmentId, serviceId: $serviceId)
+export const REDEPLOY_SERVICE = graphql(`
+  mutation serviceInstanceRedeploy(
+    $environmentId: String!
+    $serviceId: String!
+  ) {
+    serviceInstanceRedeploy(
+      environmentId: $environmentId
+      serviceId: $serviceId
+    )
   }
 `);
 

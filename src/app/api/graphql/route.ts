@@ -5,9 +5,10 @@ const ALLOWED_OPERATIONS = [
   'projects',
   'project',
   'serviceInstanceUpdate',
-  'serviceInstanceDeploy',
   'deploymentRestart',
+  'deploymentStop',
   'getEnvironmentMetrics',
+  'serviceInstanceRedeploy',
 ] as const;
 
 export async function POST(request: NextRequest) {

@@ -60,7 +60,7 @@ export const ProjectDashboard = (props: {
         />
 
         {project.environments.edges.map(({ node: currentEnv }) => (
-          <TabsContent key={currentEnv.id} value={currentEnv.id}>
+          <TabsContent key={currentEnv.id} value={currentEnv.id} className='space-y-6'>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-semibold">Services</h2>

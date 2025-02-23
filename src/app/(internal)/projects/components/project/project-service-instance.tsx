@@ -1,7 +1,11 @@
 import { Button } from '@/components/ui/button';
 import { useFragment, FragmentType } from '@/lib/network/gql';
 import { ServiceInstanceFragment } from '@/lib/network/operations';
-import { useUpdateService, useRestartDeployment } from '@/lib/network/railway';
+import {
+  useUpdateService,
+  useRestartDeployment,
+  useStopDeployment,
+} from '@/lib/network/railway';
 import { formatDistanceToNow } from 'date-fns';
 import {
   Clock,
@@ -11,35 +15,34 @@ import {
   Plus,
   RefreshCcw,
   CheckCircle2,
+  StopCircleIcon,
 } from 'lucide-react';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '../../../../../components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ProjectDeploymentStatus } from './project-deployment-status';
-import { RailwayComponentId } from '../../../../../components/railway-compontent-id';
-import { cn } from '../../../../../lib/utils';
-import { Badge } from '../../../../../components/ui/badge';
+import { RailwayComponentId } from '@/components/railway-compontent-id';
+import { cn } from '@/lib/utils';
+import { Badge } from '@/components/ui/badge';
 
 export const ProjectServiceInstance = (props: {
   className?: string;
   instance: FragmentType<typeof ServiceInstanceFragment>;
+  projectId: string;
 }) => {
   const { className } = props;
 
   const instance = useFragment(ServiceInstanceFragment, props.instance);
-  const scaleServiceMutation = useUpdateService();
-  const restartDeploymentMutation = useRestartDeployment();
+  const scaleServiceMutation = useUpdateService(props.projectId);
+  const restartDeploymentMutation = useRestartDeployment(props.projectId);
+  const stopDeploymentMutation = useStopDeployment(props.projectId);
 
   const latestDeployment = instance.latestDeployment;
   if (!latestDeployment) {
     return null;
   }
 
-  const handleScale = async (delta: number) => {
+  const scaleService = async (scale: 'up' | 'down') => {
     const currentReplicas = instance.numReplicas || 0;
+    const delta = scale === 'up' ? 1 : -1;
     const numReplicas = Math.max(0, currentReplicas + delta);
 
     scaleServiceMutation.mutate({
@@ -53,6 +56,12 @@ export const ProjectServiceInstance = (props: {
 
   const handleDeploymentRestart = async () => {
     restartDeploymentMutation.mutate({
+      id: latestDeployment.id,
+    });
+  };
+
+  const handleDeploymentStop = async () => {
+    stopDeploymentMutation.mutate({
       id: latestDeployment.id,
     });
   };
@@ -97,7 +106,17 @@ export const ProjectServiceInstance = (props: {
                 onClick={handleDeploymentRestart}
               >
                 <RefreshCcw className="size-3" />
-                Redeploy
+                Restart
+              </Button>
+
+              <Button
+                size="sm"
+                variant="outline"
+                disabled={isLoading}
+                onClick={handleDeploymentStop}
+              >
+                <StopCircleIcon className="size-3" />
+                Stop
               </Button>
             </div>
           </div>
@@ -113,9 +132,9 @@ export const ProjectServiceInstance = (props: {
               size="sm"
               variant="outline"
               disabled={isLoading || instance.numReplicas === 0}
-              onClick={() => handleScale(-1)}
+              onClick={() => scaleService('down')}
             >
-              <Minus className="h-4 w-4" />
+              <Minus className="size-3" />
             </Button>
             <span className="min-w-[3ch] text-center">
               {isLoading ? (
@@ -128,9 +147,9 @@ export const ProjectServiceInstance = (props: {
               size="sm"
               variant="outline"
               disabled={isLoading}
-              onClick={() => handleScale(1)}
+              onClick={() => scaleService('up')}
             >
-              <Plus className="h-4 w-4" />
+              <Plus className="size-3" />
             </Button>
           </div>
         </div>
