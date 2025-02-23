@@ -5,15 +5,19 @@ import { useFragment, FragmentType } from '@/lib/network/gql';
 import { ProjectFragment } from '@/lib/network/operations';
 import { ProjectStats } from './project-stats';
 import { ProjectServiceCard } from './project-service-card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { parseAsString, useQueryState } from 'nuqs';
 
 export const ProjectDashboard = (props: {
   project: FragmentType<typeof ProjectFragment>;
 }) => {
   const project = useFragment(ProjectFragment, props.project);
-  const services = project.services.edges;
 
-  // Get the first environment as default
   const defaultEnvironment = project.environments.edges[0]?.node;
+  const [environment, setEnvironment] = useQueryState(
+    'env',
+    parseAsString.withDefault(defaultEnvironment.name)
+  );
 
   if (!defaultEnvironment) {
     return (
@@ -28,44 +32,57 @@ export const ProjectDashboard = (props: {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">{project.name}</h1>
-          {project.description && (
-            <p className="text-gray-500 mt-1">{project.description}</p>
-          )}
-        </div>
-        <div className="flex items-center gap-2">
-          <Badge variant="outline">
-            Environment: {defaultEnvironment.name}
-          </Badge>
-        </div>
-      </div>
+      <Tabs
+        defaultValue={environment}
+        onValueChange={setEnvironment}
+        className="space-y-6"
+      >
+        <TabsList>
+          {project.environments.edges.map(({ node: environment }) => (
+            <TabsTrigger key={environment.id} value={environment.name}>
+              {environment.name}
+            </TabsTrigger>
+          ))}
+        </TabsList>
 
-      <ProjectStats project={props.project} />
+        <ProjectStats project={props.project} />
 
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold">Services</h2>
-          <Badge variant="outline">
-            {services.length} service{services.length !== 1 ? 's' : ''}
-          </Badge>
-        </div>
+        {project.environments.edges.map(({ node: currentEnv }) => (
+          <TabsContent key={currentEnv.id} value={currentEnv.name}>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-semibold">Services</h2>
+                <Badge variant="outline">
+                  {currentEnv.serviceInstances.edges.length} service
+                  {currentEnv.serviceInstances.edges.length !== 1 ? 's' : ''}
+                </Badge>
+              </div>
 
-        {services.length > 0 ? (
-          services.map(({ node: service }) => (
-            <ProjectServiceCard key={service.id} service={service} />
-          ))
-        ) : (
-          <Alert>
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>
-              No services found in this project. Create a new service to get
-              started.
-            </AlertDescription>
-          </Alert>
-        )}
-      </div>
+              {currentEnv.serviceInstances.edges.length > 0 ? (
+                <div className="grid gap-4">
+                  {project.services.edges.map(({ node: service }) => {
+                    return (
+                      <ProjectServiceCard
+                        key={service.id}
+                        service={service}
+                        environment={currentEnv}
+                      />
+                    );
+                  })}
+                </div>
+              ) : (
+                <Alert>
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>
+                    No services found in this environment. Create a new service
+                    to get started.
+                  </AlertDescription>
+                </Alert>
+              )}
+            </div>
+          </TabsContent>
+        ))}
+      </Tabs>
     </div>
   );
 };

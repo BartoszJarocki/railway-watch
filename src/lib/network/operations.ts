@@ -1,5 +1,25 @@
 import { graphql } from './gql';
 
+export const EnvironmentFragment = graphql(`
+  fragment EnvironmentItem on Environment {
+    id
+    name
+    serviceInstances {
+      edges {
+        node {
+          id
+          serviceName
+          serviceId
+          latestDeployment {
+            ...DeploymentItem
+          }
+          ...ServiceInstanceItem
+        }
+      }
+    }
+  }
+`);
+
 export const DeploymentFragment = graphql(`
   fragment DeploymentItem on Deployment {
     id
@@ -41,6 +61,7 @@ export const ServiceFragment = graphql(`
       edges {
         node {
           id
+          environmentId
           latestDeployment {
             ...DeploymentItem
           }
@@ -70,6 +91,14 @@ export const ProjectFragment = graphql(`
         node {
           id
           name
+          serviceInstances {
+            edges {
+              node {
+                serviceId
+              }
+            }
+          }
+          ...EnvironmentItem
         }
       }
     }

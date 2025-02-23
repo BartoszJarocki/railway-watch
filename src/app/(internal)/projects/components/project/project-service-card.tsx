@@ -2,15 +2,17 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
 import { useFragment, FragmentType } from '@/lib/network/gql';
-import { ServiceFragment } from '@/lib/network/operations';
+import { EnvironmentFragment, ServiceFragment } from '@/lib/network/operations';
 import { ProjectDeploymentStatus } from './project-deployment-status';
 import { ProjectServiceInstance } from './project-service-instance';
 
 export const ProjectServiceCard = (props: {
   service: FragmentType<typeof ServiceFragment>;
+  environment: FragmentType<typeof EnvironmentFragment>;
 }) => {
   const service = useFragment(ServiceFragment, props.service);
-  const instances = service.serviceInstances.edges;
+  const environment = useFragment(EnvironmentFragment, props.environment);
+  const instances = environment.serviceInstances.edges;
   const deploymentsCount = service.deployments.edges.length;
 
   return (
