@@ -117,6 +117,7 @@ export const GET_PROJECTS = graphql(`
       edges {
         node {
           id
+          name
           ...ProjectItem
         }
       }
