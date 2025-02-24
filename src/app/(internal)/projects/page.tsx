@@ -5,7 +5,14 @@ import { useProject } from '@/lib/network/railway';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
-import { ProjectDashboard } from './components/project/project-dashboard';
+import dynamic from 'next/dynamic';
+
+const ProjectDashboard = dynamic(
+  () => import('./components/project/project-dashboard'),
+  {
+    ssr: false,
+  }
+);
 
 export default function ProjectPage() {
   const params = useSearchParams();
@@ -21,6 +28,10 @@ export default function ProjectPage() {
           <Skeleton className="h-[200px]" />
         </div>
         <Skeleton className="h-[400px]" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Skeleton className="h-[200px]" />
+          <Skeleton className="h-[200px]" />
+        </div>
       </div>
     );
   }

@@ -1,10 +1,9 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { useQueryState, parseAsString } from 'nuqs';
 
 import { ChevronsUpDown, Check } from 'lucide-react';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 
 import { FragmentType, useFragment } from '@/lib/network/gql';
@@ -23,19 +22,21 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useSearchParams, useRouter } from 'next/navigation';
 
 const ProjectItem = (props: {
   project: FragmentType<typeof ProjectFragment>;
-  onProjectIdSelected: (projectId: string) => void;
+  onProjectSelected: (projectId: string) => void;
   selectedProjectId: string;
 }) => {
   const project = useFragment(ProjectFragment, props.project);
+  const projectId = project.id;
 
   return (
     <CommandItem
       key={project.id}
       onSelect={() => {
-        props.onProjectIdSelected(project.id);
+        props.onProjectSelected(projectId);
       }}
       className="text-sm font-mono"
     >
@@ -60,19 +61,34 @@ const ProjectItem = (props: {
 
 export const ProjectSelector = ({ query }: { query: ProjectsQuery }) => {
   const [open, setOpen] = React.useState(false);
-  const defaultProjectId = query.projects.edges[0]?.node.id;
-  const [selectedProjectId, setSelectedProjectId] = useQueryState(
-    'projectId',
-    parseAsString.withDefault(defaultProjectId).withOptions({
-      clearOnDefault: false,
-    })
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const projectId = searchParams.get('projectId');
+  const defaultProject = query.projects.edges[0].node;
+
+  const setProjectId = useCallback(
+    (projectId: string) => {
+      const params = new URLSearchParams();
+      params.set('projectId', projectId);
+      router.push(`?${params.toString()}`);
+    },
+    [router]
   );
 
+  // Handle initial state
+  React.useEffect(() => {
+    if (!projectId) {
+      setProjectId(defaultProject.id);
+    }
+  }, [defaultProject, projectId]);
+
   const selectedProject = query.projects.edges.find(
-    ({ node }) => node.id === selectedProjectId
+    ({ node }) => node.id === projectId
   )?.node;
+
   if (!selectedProject) {
-    return <div>Selected project does not exist.</div>;
+    return <div>Loading...</div>;
   }
 
   return (
@@ -107,8 +123,8 @@ export const ProjectSelector = ({ query }: { query: ProjectsQuery }) => {
               <ProjectItem
                 key={node.id}
                 project={node}
-                onProjectIdSelected={(projectId) => {
-                  setSelectedProjectId(projectId);
+                onProjectSelected={(projectId) => {
+                  setProjectId(projectId);
                   setOpen(false);
                 }}
                 selectedProjectId={selectedProject.id}

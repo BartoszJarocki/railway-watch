@@ -6,25 +6,34 @@ import { ProjectFragment } from '@/lib/network/operations';
 import { ProjectStats } from './project-stats';
 import { ProjectServiceCard } from './project-service-card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { parseAsString, useQueryState } from 'nuqs';
 import { EnvironmentMetrics } from './project-environment-metrics';
 import { RailwayComponentId } from '../../../../../components/railway-compontent-id';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useCallback } from 'react';
 
-export const ProjectDashboard = (props: {
+const ProjectDashboard = (props: {
   project: FragmentType<typeof ProjectFragment>;
 }) => {
   const project = useFragment(ProjectFragment, props.project);
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
-  const defaultEnvironment = project.environments.edges[0]?.node;
-  const [environmentId, setEnvironmentId] = useQueryState(
-    'environmentId',
-    parseAsString.withDefault(defaultEnvironment.id)
-  );
+  const environmentId =
+    searchParams.get('environmentId') || project.environments.edges[0]?.node.id;
   const currentEnvironment = project.environments.edges.find(
     ({ node }) => node.id === environmentId
   );
 
-  if (!defaultEnvironment || !currentEnvironment) {
+  const changeEnvironment = useCallback(
+    (environmentId: string) => {
+      const params = new URLSearchParams(searchParams);
+      params.set('environmentId', environmentId);
+      router.push(`?${params.toString()}`);
+    },
+    [router, searchParams]
+  );
+
+  if (!currentEnvironment) {
     return (
       <Alert>
         <AlertCircle className="h-4 w-4" />
@@ -38,8 +47,8 @@ export const ProjectDashboard = (props: {
   return (
     <div className="space-y-6">
       <Tabs
-        defaultValue={environmentId}
-        onValueChange={setEnvironmentId}
+        value={environmentId}
+        onValueChange={changeEnvironment}
         className="space-y-6"
       >
         <div className="flex items-center justify-between">
@@ -60,7 +69,11 @@ export const ProjectDashboard = (props: {
         />
 
         {project.environments.edges.map(({ node: currentEnv }) => (
-          <TabsContent key={currentEnv.id} value={currentEnv.id} className='space-y-6'>
+          <TabsContent
+            key={currentEnv.id}
+            value={currentEnv.id}
+            className="space-y-6"
+          >
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-semibold">Services</h2>
@@ -103,3 +116,5 @@ export const ProjectDashboard = (props: {
     </div>
   );
 };
+
+export default ProjectDashboard;

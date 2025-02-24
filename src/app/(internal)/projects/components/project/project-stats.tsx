@@ -28,8 +28,6 @@ export const ProjectStats = (props: {
     )
   ).length;
 
-  console.log('activeServices', activeServices);
-
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <Card>

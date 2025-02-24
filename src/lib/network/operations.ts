@@ -138,6 +138,13 @@ export const GET_PROJECTS = graphql(`
         node {
           id
           name
+          environments {
+            edges {
+              node {
+                id
+              }
+            }
+          }
           ...ProjectItem
         }
       }
