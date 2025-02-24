@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 
 export interface EnvCheckResponse {
   exists: boolean;
@@ -9,12 +9,12 @@ export interface EnvCheckResponse {
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
-    const variable = searchParams.get('variable');
+    const variable = searchParams.get("variable");
 
     if (!variable) {
       return NextResponse.json(
-        { error: 'Variable name is required' },
-        { status: 400 }
+        { error: "Variable name is required" },
+        { status: 400 },
       );
     }
 
@@ -29,8 +29,8 @@ export async function GET(request: NextRequest) {
     console.error(error);
 
     return NextResponse.json(
-      { error: 'Failed to check environment variable' },
-      { status: 500 }
+      { error: "Failed to check environment variable" },
+      { status: 500 },
     );
   }
 }

@@ -1,27 +1,28 @@
-import { Button } from '@/components/ui/button';
-import { useFragment, FragmentType } from '@/lib/network/gql';
-import { ServiceInstanceFragment } from '@/lib/network/operations';
+import { RailwayComponentId } from "@/components/railway-compontent-id";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { FragmentType, useFragment } from "@/lib/network/gql";
+import { ServiceInstanceFragment } from "@/lib/network/operations";
 import {
-  useUpdateService,
   useRestartDeployment,
   useStopDeployment,
-} from '@/lib/network/railway';
-import { formatDistanceToNow } from 'date-fns';
+  useUpdateService,
+} from "@/lib/network/railway";
+import { cn } from "@/lib/utils";
+import { formatDistanceToNow } from "date-fns";
 import {
+  CheckCircle2,
   Clock,
   Globe,
   Layers,
   Minus,
   Plus,
   RefreshCcw,
-  CheckCircle2,
   StopCircleIcon,
-} from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ProjectDeploymentStatus } from './project-deployment-status';
-import { RailwayComponentId } from '@/components/railway-compontent-id';
-import { cn } from '@/lib/utils';
-import { Badge } from '@/components/ui/badge';
+} from "lucide-react";
+
+import { ProjectDeploymentStatus } from "./project-deployment-status";
 
 export const ProjectServiceInstance = (props: {
   className?: string;
@@ -31,18 +32,18 @@ export const ProjectServiceInstance = (props: {
   const { className } = props;
 
   const instance = useFragment(ServiceInstanceFragment, props.instance);
-  const scaleServiceMutation = useUpdateService(props.projectId);
-  const restartDeploymentMutation = useRestartDeployment(props.projectId);
-  const stopDeploymentMutation = useStopDeployment(props.projectId);
+  const scaleServiceMutation = useUpdateService();
+  const restartDeploymentMutation = useRestartDeployment();
+  const stopDeploymentMutation = useStopDeployment();
 
   const latestDeployment = instance.latestDeployment;
   if (!latestDeployment) {
     return null;
   }
 
-  const scaleService = async (scale: 'up' | 'down') => {
+  const scaleService = async (scale: "up" | "down") => {
     const currentReplicas = instance.numReplicas || 0;
-    const delta = scale === 'up' ? 1 : -1;
+    const delta = scale === "up" ? 1 : -1;
     const numReplicas = Math.max(0, currentReplicas + delta);
 
     scaleServiceMutation.mutate({
@@ -69,13 +70,13 @@ export const ProjectServiceInstance = (props: {
   const isLoading = scaleServiceMutation.isPending;
 
   return (
-    <Card className={cn('relative', className)}>
+    <Card className={cn("relative", className)}>
       <Badge
         className="flex items-center gap-1 justify-end text-xs absolute -top-3 right-4 bg-background"
         variant="outline"
       >
         <Globe className="size-3" />
-        {instance.region || 'Region unknown'}
+        {instance.region || "Region unknown"}
       </Badge>
 
       <CardHeader className="flex flex-row items-center justify-between">
@@ -88,8 +89,8 @@ export const ProjectServiceInstance = (props: {
           <div className="flex items-center gap-2 text-sm text-gray-600">
             <Clock className="h-4 w-4" />
             Deployed {formatDistanceToNow(
-              new Date(latestDeployment.createdAt)
-            )}{' '}
+              new Date(latestDeployment.createdAt),
+            )}{" "}
             ago
           </div>
           <div>
@@ -132,7 +133,7 @@ export const ProjectServiceInstance = (props: {
               size="sm"
               variant="outline"
               disabled={isLoading || instance.numReplicas === 0}
-              onClick={() => scaleService('down')}
+              onClick={() => scaleService("down")}
             >
               <Minus className="size-3" />
             </Button>
@@ -147,7 +148,7 @@ export const ProjectServiceInstance = (props: {
               size="sm"
               variant="outline"
               disabled={isLoading}
-              onClick={() => scaleService('up')}
+              onClick={() => scaleService("up")}
             >
               <Plus className="size-3" />
             </Button>

@@ -1,5 +1,6 @@
-'use client';
-import { Nav } from '../nav/nav';
+"use client";
+
+import { Nav } from "../nav/nav";
 
 interface LayoutProps {
   children: React.ReactNode;

@@ -1,27 +1,28 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { toast, Toaster } from 'sonner';
-import { LogoDark } from './brand/logo-dark';
-import { Copy } from 'lucide-react';
+} from "@/components/ui/card";
+import { Copy } from "lucide-react";
+import { Toaster, toast } from "sonner";
+
+import { LogoDark } from "./brand/logo-dark";
 
 interface Props {
   error: Error;
 }
 
 function formatCause(cause: unknown): string {
-  if (typeof cause === 'string') {
+  if (typeof cause === "string") {
     return cause;
   } else if (cause instanceof Error) {
     return cause.message;
-  } else if (typeof cause === 'object' && cause !== null) {
+  } else if (typeof cause === "object" && cause !== null) {
     return JSON.stringify(cause);
   }
   return String(cause);
@@ -33,14 +34,14 @@ export function ErrorScreen({ error }: Props) {
       const textToCopy = `
         Error: ${error.name}
         Message: ${error.message}
-        ${error.cause ? `Cause: ${formatCause(error.cause)}\n` : ''}
-        ${error.stack ? `Stack: ${error.stack}` : ''}
+        ${error.cause ? `Cause: ${formatCause(error.cause)}\n` : ""}
+        ${error.stack ? `Stack: ${error.stack}` : ""}
       `.trim();
       await navigator.clipboard.writeText(textToCopy);
-      toast.success('Error details copied to clipboard');
+      toast.success("Error details copied to clipboard");
     } catch (err) {
-      console.error('Failed to copy text: ', err);
-      toast.error('Failed to copy error details');
+      console.error("Failed to copy text: ", err);
+      toast.error("Failed to copy error details");
     }
   };
 
@@ -84,7 +85,7 @@ export function ErrorScreen({ error }: Props) {
         </CardContent>
         <CardFooter className="flex justify-between items-center">
           <p className="text-sm text-muted-foreground">
-            If this error persists, please{' '}
+            If this error persists, please{" "}
             <a
               href="mailto:support@example.com"
               className="text-primary hover:underline"

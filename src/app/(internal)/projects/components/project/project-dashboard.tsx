@@ -1,14 +1,14 @@
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Badge } from '@/components/ui/badge';
-import { AlertCircle } from 'lucide-react';
-import { useFragment, FragmentType } from '@/lib/network/gql';
-import { ProjectFragment } from '@/lib/network/operations';
-import { ProjectStats } from './project-stats';
-import { ProjectServiceCard } from './project-service-card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { EnvironmentMetrics } from './project-environment-metrics';
-import { RailwayComponentId } from '../../../../../components/railway-compontent-id';
-import { useProjectParams } from '../../../../../hooks/use-project-params';
+import { RailwayComponentId } from "@/components/railway-compontent-id";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useProjectParams } from "@/hooks/use-project-params";
+import { FragmentType, useFragment } from "@/lib/network/gql";
+import { ProjectFragment } from "@/lib/network/operations";
+import { AlertCircle } from "lucide-react";
+
+import { EnvironmentMetrics } from "./project-environment-metrics";
+import { ProjectServiceCard } from "./project-service-card";
+import { ProjectStats } from "./project-stats";
 
 const ProjectDashboard = (props: {
   project: FragmentType<typeof ProjectFragment>;
@@ -21,7 +21,7 @@ const ProjectDashboard = (props: {
   });
 
   const currentEnvironment = project.environments.edges.find(
-    ({ node }) => node.id === environmentId
+    ({ node }) => node.id === environmentId,
   )?.node;
 
   if (!currentEnvironment) {
@@ -71,10 +71,6 @@ const ProjectDashboard = (props: {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-semibold">Services</h2>
-                <Badge variant="outline">
-                  {currentEnv.serviceInstances.edges.length} service
-                  {currentEnv.serviceInstances.edges.length !== 1 ? 's' : ''}
-                </Badge>
               </div>
 
               {currentEnv.serviceInstances.edges.length > 0 ? (
@@ -82,8 +78,8 @@ const ProjectDashboard = (props: {
                   {project.services.edges
                     .filter(({ node }) =>
                       node.serviceInstances.edges.some(
-                        ({ node }) => node.environmentId === currentEnv.id
-                      )
+                        ({ node }) => node.environmentId === currentEnv.id,
+                      ),
                     )
                     .map(({ node: service }) => (
                       <ProjectServiceCard

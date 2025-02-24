@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
+import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import {
-  isServer,
   QueryClient,
   QueryClientProvider,
-} from '@tanstack/react-query';
-import { TooltipProvider } from '@/components/ui/tooltip';
-import { Toaster } from '@/components/ui/sonner';
-import { NuqsAdapter } from 'nuqs/adapters/next/app';
+  isServer,
+} from "@tanstack/react-query";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 function makeQueryClient() {
   return new QueryClient({

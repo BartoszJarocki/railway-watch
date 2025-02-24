@@ -1,15 +1,16 @@
-'use client';
+"use client";
 
-import { useProjects } from '@/lib/network/railway';
-import { ProjectLoadingSkeleton } from './components/project/project-loading-skeleton';
-import { ErrorScreen } from '../../../components/error-screen';
-import { NavProjectsSelectorSkeleton } from './components/nav/nav-projects-selector-skeleton';
-import { NavProjectsSelector } from './components/nav/nav-projects-selector';
-import { ProjectsQuery } from '../../../lib/network/gql/graphql';
-import { ProjectNotFound } from './components/project/project-not-found';
-import ProjectDashboard from './components/project/project-dashboard';
-import { useProjectParams } from '../../../hooks/use-project-params';
-import { ProjectLayout } from './components/project/project-layout';
+import { useProjects } from "@/lib/network/railway";
+
+import { ErrorScreen } from "../../../components/error-screen";
+import { useProjectParams } from "../../../hooks/use-project-params";
+import { ProjectsQuery } from "../../../lib/network/gql/graphql";
+import { NavProjectsSelector } from "./components/nav/nav-projects-selector";
+import { NavProjectsSelectorSkeleton } from "./components/nav/nav-projects-selector-skeleton";
+import ProjectDashboard from "./components/project/project-dashboard";
+import { ProjectLayout } from "./components/project/project-layout";
+import { ProjectLoadingSkeleton } from "./components/project/project-loading-skeleton";
+import { ProjectNotFound } from "./components/project/project-not-found";
 
 interface ProjectsProps {
   query: ProjectsQuery;
@@ -22,10 +23,6 @@ interface ProjectsProps {
 const Projects = ({ query }: ProjectsProps) => {
   const [{ projectId }] = useProjectParams();
   const allProjects = query.projects.edges.map(({ node }) => node);
-
-  if (allProjects.length === 0) {
-    return <div>No projects found</div>;
-  }
 
   const currentProject = projectId
     ? allProjects.find((project) => project.id === projectId)

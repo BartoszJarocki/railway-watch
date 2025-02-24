@@ -1,4 +1,4 @@
-import { Badge } from './ui/badge';
+import { Badge } from "./ui/badge";
 
 interface Props {
   className?: string;
@@ -8,7 +8,7 @@ interface Props {
 export const Code = ({ className, children }: Props) => {
   return (
     <Badge variant="secondary" className={className}>
-      <code className={'text-xs font-semibold'}>{children}</code>
+      <code className={"text-xs font-semibold"}>{children}</code>
     </Badge>
   );
 };

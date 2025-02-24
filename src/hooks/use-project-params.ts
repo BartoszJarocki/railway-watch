@@ -1,5 +1,5 @@
-import { useSearchParams, usePathname, useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
 interface ProjectParams {
   defaultProjectId?: string;
@@ -14,21 +14,21 @@ export const useProjectParams = ({
   const pathname = usePathname();
   const router = useRouter();
 
-  const projectId = searchParams.get('projectId') || defaultProjectId || null;
+  const projectId = searchParams.get("projectId") || defaultProjectId || null;
   const environmentId =
-    searchParams.get('environmentId') || defaultEnvironmentId || null;
+    searchParams.get("environmentId") || defaultEnvironmentId || null;
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams);
     let shouldUpdate = false;
 
-    if (defaultProjectId && !params.has('projectId')) {
-      params.set('projectId', defaultProjectId);
+    if (defaultProjectId && !params.has("projectId")) {
+      params.set("projectId", defaultProjectId);
       shouldUpdate = true;
     }
 
-    if (defaultEnvironmentId && !params.has('environmentId')) {
-      params.set('environmentId', defaultEnvironmentId);
+    if (defaultEnvironmentId && !params.has("environmentId")) {
+      params.set("environmentId", defaultEnvironmentId);
       shouldUpdate = true;
     }
 
@@ -41,23 +41,23 @@ export const useProjectParams = ({
     newParams: Partial<{
       projectId: string | null;
       environmentId: string | null;
-    }>
+    }>,
   ) => {
     const params = new URLSearchParams(searchParams);
 
     if (newParams.projectId !== undefined) {
       if (newParams.projectId === null) {
-        params.delete('projectId');
+        params.delete("projectId");
       } else {
-        params.set('projectId', newParams.projectId);
+        params.set("projectId", newParams.projectId);
       }
     }
 
     if (newParams.environmentId !== undefined) {
       if (newParams.environmentId === null) {
-        params.delete('environmentId');
+        params.delete("environmentId");
       } else {
-        params.set('environmentId', newParams.environmentId);
+        params.set("environmentId", newParams.environmentId);
       }
     }
 

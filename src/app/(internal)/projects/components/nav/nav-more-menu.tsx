@@ -1,7 +1,6 @@
-'use client';
+"use client";
 
-import { EllipsisIcon, ExternalLinkIcon } from 'lucide-react';
-
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,23 +9,23 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
+import { EllipsisIcon, ExternalLinkIcon } from "lucide-react";
 
-import { Button } from '@/components/ui/button';
-import { cn } from '../../../../../lib/utils';
+import { cn } from "../../../../../lib/utils";
 
 const RESOURCES = {
   DOCS: {
-    link: 'https://docs.railway.com',
-    title: 'Railway documentation',
+    link: "https://docs.railway.com",
+    title: "Railway documentation",
   },
   BLOG: {
-    link: 'https://blog.railway.com',
-    title: 'Railway Blog',
+    link: "https://blog.railway.com",
+    title: "Railway Blog",
   },
   SUPPORT: {
-    link: 'https://help.railway.com',
-    title: 'Support Center',
+    link: "https://help.railway.com",
+    title: "Support Center",
   },
 } as const;
 
@@ -60,7 +59,7 @@ export function NavMoreMenu() {
                       <span className="truncate text-xs">{resource.title}</span>
                     </div>
                     <ExternalLinkIcon
-                      className={cn('h-4 w-4 shrink-0 ml-auto')}
+                      className={cn("h-4 w-4 shrink-0 ml-auto")}
                     />
                   </div>
                 </a>

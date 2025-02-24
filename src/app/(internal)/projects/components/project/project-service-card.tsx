@@ -1,12 +1,13 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { AlertCircle } from 'lucide-react';
-import { useFragment, FragmentType } from '@/lib/network/gql';
-import { EnvironmentFragment, ServiceFragment } from '@/lib/network/operations';
-import { ProjectServiceInstance } from './project-service-instance';
-import { RailwayComponentId } from '../../../../../components/railway-compontent-id';
-import { useRedeployService } from '../../../../../lib/network/railway';
-import { Button } from '../../../../../components/ui/button';
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { FragmentType, useFragment } from "@/lib/network/gql";
+import { EnvironmentFragment, ServiceFragment } from "@/lib/network/operations";
+import { AlertCircle } from "lucide-react";
+
+import { RailwayComponentId } from "../../../../../components/railway-compontent-id";
+import { Button } from "../../../../../components/ui/button";
+import { useRedeployService } from "../../../../../lib/network/railway";
+import { ProjectServiceInstance } from "./project-service-instance";
 
 export const ProjectServiceCard = (props: {
   service: FragmentType<typeof ServiceFragment>;
@@ -16,13 +17,13 @@ export const ProjectServiceCard = (props: {
   const environment = useFragment(EnvironmentFragment, props.environment);
   // Filter instances to only show those belonging to this service
   const serviceInstances = environment.serviceInstances.edges.filter(
-    ({ node }) => node.serviceId === service.id
+    ({ node }) => node.serviceId === service.id,
   );
   const deploymentsCount = service.deployments.edges.filter(
-    ({ node }) => node.environmentId === environment.id
+    ({ node }) => node.environmentId === environment.id,
   ).length;
 
-  const redeployServiceMutation = useRedeployService(service.projectId);
+  const redeployServiceMutation = useRedeployService();
 
   const handleRedeployService = () => {
     redeployServiceMutation.mutate({
@@ -39,7 +40,7 @@ export const ProjectServiceCard = (props: {
             {service.name}
           </CardTitle>
           <p className="text-sm text-gray-500">
-            {deploymentsCount} deployment{deploymentsCount !== 1 ? 's' : ''}
+            {deploymentsCount} deployment{deploymentsCount !== 1 ? "s" : ""}
           </p>
 
           <Button onClick={handleRedeployService} size="sm">

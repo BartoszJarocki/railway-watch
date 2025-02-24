@@ -1,6 +1,6 @@
 // hooks/useEnvCheck.ts
-import { useQuery } from '@tanstack/react-query';
-import type { EnvCheckResponse } from '@/app/api/rest/check-env/route';
+import type { EnvCheckResponse } from "@/app/api/rest/check-env/route";
+import { useQuery } from "@tanstack/react-query";
 
 interface UseEnvCheckOptions {
   /**
@@ -25,16 +25,16 @@ export function useEnvCheck({
   refetchInterval = 5000,
 }: UseEnvCheckOptions) {
   return useQuery({
-    queryKey: ['env', variableName],
+    queryKey: ["env", variableName],
     queryFn: async (): Promise<EnvCheckResponse> => {
       const response = await fetch(
         `/api/rest/check-env?variable=${encodeURIComponent(variableName)}`,
         {
           headers: {
-            'Cache-Control': 'no-cache',
-            Pragma: 'no-cache',
+            "Cache-Control": "no-cache",
+            Pragma: "no-cache",
           },
-        }
+        },
       );
 
       if (!response.ok) {

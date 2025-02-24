@@ -1,25 +1,25 @@
-import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
-import Providers from '../components/context/providers';
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
 
-export const dynamic = 'force-dynamic';
+import Providers from "../components/context/providers";
+import { cn } from "../lib/utils";
+import "./globals.css";
 
-import './globals.css';
-import { cn } from '../lib/utils';
+export const dynamic = "force-dynamic";
 
 const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
 });
 
 const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: 'Railway Monitor',
-  description: 'Monitor your Railway applications',
+  title: "Railway Monitor",
+  description: "Monitor your Railway applications",
 };
 
 export default function RootLayout({
@@ -33,7 +33,7 @@ export default function RootLayout({
         className={cn(
           geistSans.variable,
           geistMono.variable,
-          'w-full h-full bg-background'
+          "w-full h-full bg-background",
         )}
       >
         <Providers>{children}</Providers>

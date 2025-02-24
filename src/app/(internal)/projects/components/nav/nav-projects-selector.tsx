@@ -1,28 +1,27 @@
-'use client';
+"use client";
 
-import { cn } from '@/lib/utils';
-
-import { ChevronsUpDown, Check } from 'lucide-react';
-import React from 'react';
-import { Button } from '@/components/ui/button';
-
-import { FragmentType, useFragment } from '@/lib/network/gql';
-import { ProjectsQuery } from '@/lib/network/gql/graphql';
-import { ProjectFragment } from '@/lib/network/operations';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
   CommandInput,
   CommandItem,
   CommandList,
-} from '@/components/ui/command';
+} from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useProjectParams } from '../../../../../hooks/use-project-params';
+} from "@/components/ui/popover";
+import { FragmentType, useFragment } from "@/lib/network/gql";
+import { ProjectsQuery } from "@/lib/network/gql/graphql";
+import { ProjectFragment } from "@/lib/network/operations";
+import { cn } from "@/lib/utils";
+import { Check, ChevronsUpDown } from "lucide-react";
+import React from "react";
+
+import { useProjectParams } from "../../../../../hooks/use-project-params";
 
 const ProjectItem = (props: {
   project: FragmentType<typeof ProjectFragment>;
@@ -51,8 +50,8 @@ const ProjectItem = (props: {
       {project.name}
       <Check
         className={cn(
-          'ml-auto',
-          props.selectedProjectId === project.id ? 'opacity-100' : 'opacity-0'
+          "ml-auto",
+          props.selectedProjectId === project.id ? "opacity-100" : "opacity-0",
         )}
       />
     </CommandItem>
@@ -67,7 +66,7 @@ export const NavProjectsSelector = ({ query }: { query: ProjectsQuery }) => {
     defaultProjectId: defaultProject.id,
   });
   const selectedProject = query.projects.edges.find(
-    ({ node }) => node.id === projectParams.projectId
+    ({ node }) => node.id === projectParams.projectId,
   )?.node;
 
   if (!selectedProject) {
@@ -82,7 +81,7 @@ export const NavProjectsSelector = ({ query }: { query: ProjectsQuery }) => {
           role="combobox"
           aria-expanded={open}
           aria-label="Select a project"
-          className={cn('w-[200px] justify-between')}
+          className={cn("w-[200px] justify-between")}
         >
           <Avatar className="mr-2 h-5 w-5">
             <AvatarImage

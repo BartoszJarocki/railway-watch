@@ -1,15 +1,16 @@
-import { useFragment, FragmentType } from '@/lib/network/gql';
-import { EnvironmentFragment } from '@/lib/network/operations';
-import { MetricMeasurement } from '../../../../../lib/network/gql/graphql';
-import { useMetrics } from '../../../../../lib/network/railway';
+import { FragmentType, useFragment } from "@/lib/network/gql";
+import { EnvironmentFragment } from "@/lib/network/operations";
+import { Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
+
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '../../../../../components/ui/card';
-import { ResponsiveContainer, XAxis, YAxis, Line, LineChart } from 'recharts';
+} from "../../../../../components/ui/card";
+import { MetricMeasurement } from "../../../../../lib/network/gql/graphql";
+import { useMetrics } from "../../../../../lib/network/railway";
 
 // Get metrics for last 24 hours
 const startDate = new Date();
@@ -59,7 +60,7 @@ export const EnvironmentMetrics = (props: {
             <ResponsiveContainer width="100%" height="100%">
               <LineChart
                 data={
-                  data?.metrics.find((m) => m.measurement === 'CPU_USAGE')
+                  data?.metrics.find((m) => m.measurement === "CPU_USAGE")
                     ?.values || []
                 }
               >
@@ -89,7 +90,7 @@ export const EnvironmentMetrics = (props: {
               <LineChart
                 data={
                   data?.metrics.find(
-                    (m) => m.measurement === MetricMeasurement.MemoryUsageGb
+                    (m) => m.measurement === MetricMeasurement.MemoryUsageGb,
                   )?.values || []
                 }
               >
@@ -119,7 +120,7 @@ export const EnvironmentMetrics = (props: {
               <LineChart
                 data={
                   data?.metrics.find(
-                    (m) => m.measurement === MetricMeasurement.NetworkRxGb
+                    (m) => m.measurement === MetricMeasurement.NetworkRxGb,
                   )?.values || []
                 }
               >
@@ -137,7 +138,7 @@ export const EnvironmentMetrics = (props: {
                   type="basis"
                   data={
                     data?.metrics.find(
-                      (m) => m.measurement === MetricMeasurement.NetworkTxGb
+                      (m) => m.measurement === MetricMeasurement.NetworkTxGb,
                     )?.values || []
                   }
                   dataKey="value"

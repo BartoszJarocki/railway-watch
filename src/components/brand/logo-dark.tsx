@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 
 export const LogoDark: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg

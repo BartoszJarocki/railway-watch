@@ -1,28 +1,29 @@
-'use client';
+"use client";
 
-import { useEnvCheck } from '@/lib/network/env/use-env-check';
+import { Code } from "@/components/code";
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
-  CardHeader,
   CardContent,
   CardDescription,
-} from '@/components/ui/card';
-import { LogoDark } from '../components/brand/logo-dark';
-import { Code } from '@/components/code';
-import { Badge } from '@/components/ui/badge';
-import { cn } from '../lib/utils';
-import React from 'react';
-import { RAILWAY_LINKS } from '../lib/data/links';
+  CardHeader,
+} from "@/components/ui/card";
+import { useEnvCheck } from "@/lib/network/env/use-env-check";
+import Link from "next/link";
+import React from "react";
+
+import { LogoDark } from "../components/brand/logo-dark";
+import { Button } from "../components/ui/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from '../components/ui/tooltip';
-import { useIsLocalEnvironment } from '../hooks/use-is-local-env';
-import { Button } from '../components/ui/button';
-import Link from 'next/link';
+} from "../components/ui/tooltip";
+import { useIsLocalEnvironment } from "../hooks/use-is-local-env";
+import { RAILWAY_LINKS } from "../lib/data/links";
+import { cn } from "../lib/utils";
 
-const RAILWAY_API_ACCOUNT_TOKEN_ENV_VARIABLE = 'RAILWAY_API_ACCOUNT_TOKEN';
+const RAILWAY_API_ACCOUNT_TOKEN_ENV_VARIABLE = "RAILWAY_API_ACCOUNT_TOKEN";
 
 export default function Page() {
   const { data, error, isLoading } = useEnvCheck({
@@ -49,7 +50,7 @@ export default function Page() {
         <div className="flex items-center gap-2 text-red-500">
           <div className="w-3 h-3 rounded-full bg-red-500" />
           <p>
-            Error: {error instanceof Error ? error.message : 'Unknown error'}
+            Error: {error instanceof Error ? error.message : "Unknown error"}
           </p>
         </div>
       );
@@ -74,15 +75,15 @@ export default function Page() {
             <TooltipTrigger asChild>
               <Badge
                 className={cn(
-                  `text-xs ${data.exists ? 'bg-green-500' : 'bg-red-500'}`
+                  `text-xs ${data.exists ? "bg-green-500" : "bg-red-500"}`,
                 )}
               >
-                {data.exists ? 'Configured' : 'Not set'}
+                {data.exists ? "Configured" : "Not set"}
               </Badge>
             </TooltipTrigger>
             <TooltipContent>
               <p className="text-xs font-mono">
-                Last checked:{' '}
+                Last checked:{" "}
                 <span className="tabular-nums">
                   {new Date(data.timestamp).toLocaleTimeString()}
                 </span>
@@ -124,14 +125,14 @@ export default function Page() {
 
           <div>
             Railway monitor requires the following environment variables to be
-            set.{' '}
+            set.{" "}
             <a href={RAILWAY_LINKS.ENV_VARIABLES_PAGE} target="_blank">
               You can learn how to set environemt variables in Railway here.
             </a>
             {isLocalEnv ? (
               <p className="mt-6 bg-muted rounded-md px-3 py-2 text-xs text-muted-foreground text-pretty">
                 On local environment, you can set the environment variables by
-                creating <Code className="px-0">.env</Code> or{' '}
+                creating <Code className="px-0">.env</Code> or{" "}
                 <Code className="px-0">.env.local</Code> file in the root of
                 your project.
               </p>
@@ -144,9 +145,9 @@ export default function Page() {
       <Button
         asChild
         className={cn(
-          'px-6',
+          "px-6",
           !isApplicationReady &&
-            'opacity-50 pointer-events-none cursor-not-allowed'
+            "opacity-50 pointer-events-none cursor-not-allowed",
         )}
       >
         <Link
