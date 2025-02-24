@@ -3,7 +3,7 @@
 import { cn } from '@/lib/utils';
 
 import { ChevronsUpDown, Check } from 'lucide-react';
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Button } from '@/components/ui/button';
 
 import { FragmentType, useFragment } from '@/lib/network/gql';
@@ -22,7 +22,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParam } from '@/hooks/use-search-params';
 
 const ProjectItem = (props: {
   project: FragmentType<typeof ProjectFragment>;
@@ -59,30 +59,15 @@ const ProjectItem = (props: {
   );
 };
 
-export const ProjectSelector = ({ query }: { query: ProjectsQuery }) => {
+export const NavProjectsSelector = ({ query }: { query: ProjectsQuery }) => {
   const [open, setOpen] = React.useState(false);
-  const router = useRouter();
-  const searchParams = useSearchParams();
 
-  const projectId = searchParams.get('projectId');
   const defaultProject = query.projects.edges[0].node;
-
-  const setProjectId = useCallback(
-    (projectId: string) => {
-      const params = new URLSearchParams();
-      params.set('projectId', projectId);
-      router.push(`?${params.toString()}`);
-    },
-    [router]
+  const [projectId, setProjectId] = useSearchParam(
+    'projectId',
+    defaultProject.id,
+    { exclusive: true }
   );
-
-  // Handle initial state
-  React.useEffect(() => {
-    if (!projectId) {
-      setProjectId(defaultProject.id);
-    }
-  }, [defaultProject, projectId]);
-
   const selectedProject = query.projects.edges.find(
     ({ node }) => node.id === projectId
   )?.node;
@@ -115,7 +100,7 @@ export const ProjectSelector = ({ query }: { query: ProjectsQuery }) => {
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
         <Command>
-          <CommandInput placeholder="Search team..." />
+          <CommandInput placeholder="Search projects..." />
           <CommandList className="p-1">
             <CommandEmpty>No projects found.</CommandEmpty>
 

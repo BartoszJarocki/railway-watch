@@ -2,26 +2,28 @@
 import { useProjects } from '@/lib/network/railway';
 import React from 'react';
 
-import { NavMenu } from './components/nav/nav-menu';
-import { ProjectSelectorSkeleton } from './components/nav/project-selector-skeleton';
-import { ProjectSelector } from './components/nav/project-selector';
+import { NavProjectsSelectorSkeleton } from './components/nav/nav-projects-selector-skeleton';
+import { NavProjectsSelector } from './components/nav/nav-projects-selector';
+import { Nav } from './components/nav/nav';
+import { ErrorScreen } from '../../../components/error-screen';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { data, isLoading, error } = useProjects({ first: 10 });
 
+  if (error) {
+    return <ErrorScreen error={error} />;
+  }
+
   return (
-    <div className="divide-y">
-      <header>
-        <div className="h-16 container mx-auto px-3 md:px-6 flex items-center justify-between">
-          {isLoading ? <ProjectSelectorSkeleton /> : null}
-          {error ? <div>Error loading projects: {error.message}</div> : null}
-          {data ? <ProjectSelector query={data} /> : null}
+    <main className="w-full h-full">
+      <Nav className="h-16 m-4">
+        {isLoading ? <NavProjectsSelectorSkeleton /> : null}
+        {data ? <NavProjectsSelector query={data} /> : null}
+      </Nav>
 
-          <NavMenu />
-        </div>
-      </header>
-
-      <div className="container mx-auto p-3 md:p-6">{children}</div>
-    </div>
+      <div className="pt-20">
+        <div className="container mx-auto p-3 md:p-6">{children}</div>
+      </div>
+    </main>
   );
 }

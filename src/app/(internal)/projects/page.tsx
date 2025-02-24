@@ -2,60 +2,26 @@
 
 import { useSearchParams } from 'next/navigation';
 import { useProject } from '@/lib/network/railway';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { AlertCircle } from 'lucide-react';
-import dynamic from 'next/dynamic';
-
-const ProjectDashboard = dynamic(
-  () => import('./components/project/project-dashboard'),
-  {
-    ssr: false,
-  }
-);
+import ProjectDashboard from './components/project/project-dashboard';
+import { ProjectLoadingSkeleton } from './components/project/project-loading-skeleton';
+import { ErrorScreen } from '../../../components/error-screen';
+import { ProjectNotFound } from './components/project/project-not-found';
 
 export default function ProjectPage() {
   const params = useSearchParams();
-  const projectId = params.get('projectId')!;
-  const { data, isLoading, error } = useProject({ id: projectId });
+  const projectId = params.get('projectId');
+  const { data, isLoading, error } = useProject({ id: projectId ?? '' });
 
   if (isLoading || !projectId) {
-    return (
-      <div className="space-y-4">
-        <Skeleton className="h-12 w-[300px]" />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Skeleton className="h-[200px]" />
-          <Skeleton className="h-[200px]" />
-        </div>
-        <Skeleton className="h-[400px]" />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Skeleton className="h-[200px]" />
-          <Skeleton className="h-[200px]" />
-        </div>
-      </div>
-    );
+    return <ProjectLoadingSkeleton />;
   }
 
   if (error) {
-    return (
-      <Alert variant="destructive">
-        <AlertCircle className="h-4 w-4" />
-        <AlertDescription>
-          Error loading project: {error.message}
-        </AlertDescription>
-      </Alert>
-    );
+    return <ErrorScreen error={error} />;
   }
 
   if (!data?.project) {
-    return (
-      <Alert>
-        <AlertCircle className="h-4 w-4" />
-        <AlertDescription>
-          No project found with ID: {projectId}
-        </AlertDescription>
-      </Alert>
-    );
+    return <ProjectNotFound projectId={projectId} />;
   }
 
   return <ProjectDashboard project={data.project} />;

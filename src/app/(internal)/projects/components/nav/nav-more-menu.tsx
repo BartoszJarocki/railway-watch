@@ -30,7 +30,7 @@ const RESOURCES = {
   },
 } as const;
 
-export function NavMenu() {
+export function NavMoreMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

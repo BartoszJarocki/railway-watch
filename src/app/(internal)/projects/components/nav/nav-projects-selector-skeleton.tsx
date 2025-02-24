@@ -1,7 +1,7 @@
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 
-export const ProjectSelectorSkeleton = () => {
+export const NavProjectsSelectorSkeleton = () => {
   return (
     <div className={cn('flex w-[200px] justify-between gap-2')}>
       <Skeleton className="h-5 w-5 rounded-full" />
