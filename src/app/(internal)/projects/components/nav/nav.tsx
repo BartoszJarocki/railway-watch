@@ -5,7 +5,7 @@ import { NavMoreMenu } from './nav-more-menu';
 
 interface Props {
   className?: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 export const Nav = ({ className, children }: Props) => {

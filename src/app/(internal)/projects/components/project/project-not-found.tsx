@@ -1,15 +1,18 @@
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
 
 interface Props {
-  projectId: string;
+  projectId: string | null;
 }
 
 export const ProjectNotFound = ({ projectId }: Props) => {
   return (
     <Alert>
       <AlertCircle className="h-4 w-4" />
-      <AlertDescription>No project found with ID: {projectId}</AlertDescription>
+      <AlertTitle>No project found</AlertTitle>
+      {projectId && (
+        <AlertDescription>Project ID: {projectId}</AlertDescription>
+      )}
     </Alert>
   );
 };

@@ -22,7 +22,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useSearchParam } from '@/hooks/use-search-params';
+import { useProjectParams } from '../../../../../hooks/use-project-params';
 
 const ProjectItem = (props: {
   project: FragmentType<typeof ProjectFragment>;
@@ -63,17 +63,15 @@ export const NavProjectsSelector = ({ query }: { query: ProjectsQuery }) => {
   const [open, setOpen] = React.useState(false);
 
   const defaultProject = query.projects.edges[0].node;
-  const [projectId, setProjectId] = useSearchParam(
-    'projectId',
-    defaultProject.id,
-    { exclusive: true }
-  );
+  const [projectParams, setProjectParams] = useProjectParams({
+    defaultProjectId: defaultProject.id,
+  });
   const selectedProject = query.projects.edges.find(
-    ({ node }) => node.id === projectId
+    ({ node }) => node.id === projectParams.projectId
   )?.node;
 
   if (!selectedProject) {
-    return <div>Loading...</div>;
+    return null;
   }
 
   return (
@@ -109,7 +107,7 @@ export const NavProjectsSelector = ({ query }: { query: ProjectsQuery }) => {
                 key={node.id}
                 project={node}
                 onProjectSelected={(projectId) => {
-                  setProjectId(projectId);
+                  setProjectParams({ projectId, environmentId: null });
                   setOpen(false);
                 }}
                 selectedProjectId={selectedProject.id}

@@ -8,18 +8,18 @@ import { ProjectServiceCard } from './project-service-card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { EnvironmentMetrics } from './project-environment-metrics';
 import { RailwayComponentId } from '../../../../../components/railway-compontent-id';
-import { useSearchParam } from '../../../../../hooks/use-search-params';
+import { useProjectParams } from '../../../../../hooks/use-project-params';
 
 const ProjectDashboard = (props: {
   project: FragmentType<typeof ProjectFragment>;
 }) => {
   const project = useFragment(ProjectFragment, props.project);
 
-  const defaultEnvironmentId = project.environments.edges[0]?.node.id;
-  const [environmentId, setEnvironmentId] = useSearchParam(
-    'environmentId',
-    defaultEnvironmentId
-  );
+  const defaultEnvironment = project.environments.edges[0]?.node;
+  const [{ environmentId }, setProjectParams] = useProjectParams({
+    defaultEnvironmentId: defaultEnvironment.id,
+  });
+
   const currentEnvironment = project.environments.edges.find(
     ({ node }) => node.id === environmentId
   )?.node;
@@ -39,7 +39,7 @@ const ProjectDashboard = (props: {
     <div className="space-y-6">
       <Tabs
         value={currentEnvironment.id}
-        onValueChange={setEnvironmentId}
+        onValueChange={(value) => setProjectParams({ environmentId: value })}
         className="space-y-6"
       >
         <div className="flex items-center justify-between">
