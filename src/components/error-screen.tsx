@@ -1,5 +1,8 @@
 "use client";
 
+import { Copy } from "lucide-react";
+import { Toaster, toast } from "sonner";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -8,8 +11,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Copy } from "lucide-react";
-import { Toaster, toast } from "sonner";
 
 import { LogoDark } from "./brand/logo-dark";
 

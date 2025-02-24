@@ -1,5 +1,8 @@
 "use client";
 
+import { Check, ChevronsUpDown } from "lucide-react";
+import React from "react";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,8 +21,6 @@ import { FragmentType, useFragment } from "@/lib/network/gql";
 import { ProjectsQuery } from "@/lib/network/gql/graphql";
 import { ProjectFragment } from "@/lib/network/operations";
 import { cn } from "@/lib/utils";
-import { Check, ChevronsUpDown } from "lucide-react";
-import React from "react";
 
 import { useProjectParams } from "../../../../../hooks/use-project-params";
 

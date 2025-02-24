@@ -1,5 +1,7 @@
 "use client";
 
+import { EllipsisIcon, ExternalLinkIcon } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -10,7 +12,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { EllipsisIcon, ExternalLinkIcon } from "lucide-react";
 
 import { cn } from "../../../../../lib/utils";
 

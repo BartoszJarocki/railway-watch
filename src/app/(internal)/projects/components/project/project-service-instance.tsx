@@ -1,3 +1,15 @@
+import { formatDistanceToNow } from "date-fns";
+import {
+  CheckCircle2,
+  Clock,
+  Globe,
+  Layers,
+  Minus,
+  Plus,
+  RefreshCcw,
+  StopCircleIcon,
+} from "lucide-react";
+
 import { RailwayComponentId } from "@/components/railway-compontent-id";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -10,17 +22,6 @@ import {
   useUpdateService,
 } from "@/lib/network/railway";
 import { cn } from "@/lib/utils";
-import { formatDistanceToNow } from "date-fns";
-import {
-  CheckCircle2,
-  Clock,
-  Globe,
-  Layers,
-  Minus,
-  Plus,
-  RefreshCcw,
-  StopCircleIcon,
-} from "lucide-react";
 
 import { ProjectDeploymentStatus } from "./project-deployment-status";
 

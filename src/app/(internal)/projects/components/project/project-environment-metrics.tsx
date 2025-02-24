@@ -1,6 +1,7 @@
+import { Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
+
 import { FragmentType, useFragment } from "@/lib/network/gql";
 import { EnvironmentFragment } from "@/lib/network/operations";
-import { Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
 import {
   Card,

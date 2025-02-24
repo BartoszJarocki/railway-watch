@@ -1,6 +1,7 @@
 // hooks/useEnvCheck.ts
-import type { EnvCheckResponse } from "@/app/api/rest/check-env/route";
 import { useQuery } from "@tanstack/react-query";
+
+import type { EnvCheckResponse } from "@/app/api/rest/check-env/route";
 
 interface UseEnvCheckOptions {
   /**

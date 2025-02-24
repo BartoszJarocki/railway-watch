@@ -1,10 +1,11 @@
+import { AlertCircle } from "lucide-react";
+
 import { RailwayComponentId } from "@/components/railway-compontent-id";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useProjectParams } from "@/hooks/use-project-params";
 import { FragmentType, useFragment } from "@/lib/network/gql";
 import { ProjectFragment } from "@/lib/network/operations";
-import { AlertCircle } from "lucide-react";
 
 import { EnvironmentMetrics } from "./project-environment-metrics";
 import { ProjectServiceCard } from "./project-service-card";
@@ -69,7 +70,7 @@ const ProjectDashboard = (props: {
             className="space-y-6"
           >
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
+              <div className="flex justify-between items-center">
                 <h2 className="text-xl font-semibold">Services</h2>
               </div>
 

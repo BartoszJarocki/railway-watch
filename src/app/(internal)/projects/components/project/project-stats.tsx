@@ -1,8 +1,9 @@
+import { format } from "date-fns";
+import { Clock, Database, Eye, Power } from "lucide-react";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FragmentType, useFragment } from "@/lib/network/gql";
 import { EnvironmentFragment, ProjectFragment } from "@/lib/network/operations";
-import { format } from "date-fns";
-import { Clock, Database, Eye, Power } from "lucide-react";
 
 export const ProjectStats = (props: {
   project: FragmentType<typeof ProjectFragment>;
