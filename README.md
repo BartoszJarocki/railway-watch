@@ -1,36 +1,107 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Railway Monitor
 
-## Getting Started
+Simple dashboard built on top of Railway's Public API.
 
-First, run the development server:
+## 1. Setup Instructions
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
+### Prerequisites
+
+- pnpm (Install with: npm install -g pnpm)
+- Git
+- Railway API account token
+
+### Initial Setup
+
+1. Clone the repository:
+git clone <repository-url>
+cd railway-monitor
+
+2. Install dependencies:
+pnpm install
+
+3. Environment Configuration:
+Create a `.env.local` file in the root directory:
+RAILWAY_API_ACCOUNT_TOKEN=<your-token>
+
+4. Start development server:
 pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The application will be available at <http://localhost:3000>
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Build for Production
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+pnpm build
+pnpm start
 
-## Learn More
+## 2. Project Structure Overview
 
-To learn more about Next.js, take a look at the following resources:
+src/
+├── app/                    # Next.js app directory
+│   ├── (internal)/        # Protected routes
+│   ├── api/               # API routes
+│   │   ├── graphql/      # GraphQL API endpoint
+│   │   └── rest/         # REST API endpoints
+│   └── layout.tsx        # Root layout
+├── components/            # Shared components
+│   ├── brand/            # Branding components
+│   ├── context/          # Context providers
+│   └── ui/               # UI components library
+├── hooks/                # Custom React hooks
+└── lib/                  # Utility functions and configurations
+    ├── data/            # Static data
+    └── network/         # Network related code
+        ├── env/        # Environment configuration
+        └── gql/        # GraphQL types and operations
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 3. Development Workflow
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Code Organization
 
-## Deploy on Vercel
+1. Components
+   - Place reusable UI components in src/components/ui/
+   - Place page-specific components in their respective page directories
+   - Use the shadcn/ui component system for consistent styling
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2. GraphQL Operations
+   - Define operations in src/lib/network/operations.ts
+   - Generate types using GraphQL Codegen: `pnpm generate-gql-types`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+3. Styling
+   - Use Tailwind CSS for styling
+   - Follow the design system defined in the UI components
+   - Use the cn() utility for conditional class names
+
+### Development Process
+
+1. Create a new feature branch
+2. Implement changes following the project structure
+3. Run tests and linting:
+   pnpm lint
+4. Format code:
+   pnpm format
+5. Submit pull request
+
+### Package Management
+
+- Add new dependencies: pnpm add <package-name>
+- Add dev dependencies: pnpm add -D <package-name>
+- Update dependencies: pnpm update
+- Clean install: pnpm install --frozen-lockfile
+
+## 5. Common Troubleshooting Steps
+
+### API Connection Issues
+
+1. Verify Railway API token is correctly set in environment variables
+2. Check API endpoint status
+3. Verify network connectivity
+4. Check request/response in browser developer tools
+
+### Build Issues
+
+1. Clear .next directory
+2. Delete node_modules and pnpm-store
+3. Run pnpm store prune
+4. Fresh install with pnpm install --frozen-lockfile
+5. Verify TypeScript compilation
+6. Check for conflicting dependencies

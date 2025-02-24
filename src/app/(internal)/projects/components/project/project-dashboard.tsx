@@ -7,11 +7,11 @@ import { useProjectParams } from "@/hooks/use-project-params";
 import { FragmentType, useFragment } from "@/lib/network/gql";
 import { ProjectFragment } from "@/lib/network/operations";
 
-import { EnvironmentMetrics } from "./project-environment-metrics";
+import ProjectEnvironmentMetrics from "./project-environment-metrics";
 import { ProjectServiceCard } from "./project-service-card";
 import { ProjectStats } from "./project-stats";
 
-const ProjectDashboard = (props: {
+export const ProjectDashboard = (props: {
   project: FragmentType<typeof ProjectFragment>;
 }) => {
   const project = useFragment(ProjectFragment, props.project);
@@ -20,12 +20,10 @@ const ProjectDashboard = (props: {
   const [{ environmentId }, setProjectParams] = useProjectParams({
     defaultEnvironmentId: defaultEnvironment.id,
   });
-
-  const currentEnvironment = project.environments.edges.find(
+  const selectedEnvironment = project.environments.edges.find(
     ({ node }) => node.id === environmentId,
   )?.node;
-
-  if (!currentEnvironment) {
+  if (!selectedEnvironment) {
     return (
       <Alert>
         <AlertCircle className="h-4 w-4" />
@@ -39,7 +37,7 @@ const ProjectDashboard = (props: {
   return (
     <div className="space-y-6">
       <Tabs
-        value={currentEnvironment.id}
+        value={selectedEnvironment.id}
         onValueChange={(value) => setProjectParams({ environmentId: value })}
         className="space-y-6"
       >
@@ -54,13 +52,13 @@ const ProjectDashboard = (props: {
 
           <RailwayComponentId
             name="Environment id"
-            value={currentEnvironment.id}
+            value={selectedEnvironment.id}
           />
         </div>
 
         <ProjectStats
           project={props.project}
-          environment={currentEnvironment}
+          environment={selectedEnvironment}
         />
 
         {project.environments.edges.map(({ node: currentEnv }) => (
@@ -100,12 +98,10 @@ const ProjectDashboard = (props: {
               )}
             </div>
 
-            <EnvironmentMetrics environment={currentEnv} />
+            <ProjectEnvironmentMetrics environment={currentEnv} />
           </TabsContent>
         ))}
       </Tabs>
     </div>
   );
 };
-
-export default ProjectDashboard;

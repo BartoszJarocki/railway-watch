@@ -6,6 +6,7 @@ interface LayoutProps {
   children: React.ReactNode;
   navContent?: React.ReactNode;
 }
+
 export const ProjectLayout = ({ children, navContent }: LayoutProps) => (
   <main className="w-full h-full">
     <Nav className="h-16 m-4">{navContent}</Nav>

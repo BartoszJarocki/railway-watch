@@ -3,11 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "generate-gql-types": "graphql-codegen",
+    "predev": "pnpm generate-gql-types",
     "dev": "next dev --turbopack",
+    "prebuild": "pnpm generate-gql-types",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "generate": "graphql-codegen",
     "format": "prettier --write ."
   },
   "dependencies": {

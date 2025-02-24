@@ -1,13 +1,13 @@
 "use client";
 
+import { ErrorScreen } from "@/components/error-screen";
+import { useProjectParams } from "@/hooks/use-project-params";
+import { ProjectsQuery } from "@/lib/network/gql/graphql";
 import { useProjects } from "@/lib/network/railway";
 
-import { ErrorScreen } from "../../../components/error-screen";
-import { useProjectParams } from "../../../hooks/use-project-params";
-import { ProjectsQuery } from "../../../lib/network/gql/graphql";
 import { NavProjectsSelector } from "./components/nav/nav-projects-selector";
 import { NavProjectsSelectorSkeleton } from "./components/nav/nav-projects-selector-skeleton";
-import ProjectDashboard from "./components/project/project-dashboard";
+import { ProjectDashboard } from "./components/project/project-dashboard";
 import { ProjectLayout } from "./components/project/project-layout";
 import { ProjectLoadingSkeleton } from "./components/project/project-loading-skeleton";
 import { ProjectNotFound } from "./components/project/project-not-found";
