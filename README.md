@@ -35,6 +35,7 @@ pnpm start
 
 ## 2. Project Structure Overview
 
+```
 src/
 ├── app/                    # Next.js app directory
 │   ├── (internal)/        # Protected routes
@@ -52,6 +53,7 @@ src/
     └── network/         # Network related code
         ├── env/        # Environment configuration
         └── gql/        # GraphQL types and operations
+```
 
 ## 3. Development Workflow
 
