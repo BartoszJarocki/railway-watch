@@ -1,4 +1,15 @@
-# Railway Monitor
+![hero](image.png)
+
+<p align="center">
+ <h1 align="center"><b>Railway Monitor</b></h1>
+<p align="center">
+    Simple dashboard built on top of Railway's Public API.
+    <br />
+    <br />
+    <a href="#prerequisites"><strong>Prerequisites</strong></a> ·
+    <a href="#initial-setup"><strong>Initial setup</strong></a> ·
+  </p>
+</p>
 
 Simple dashboard built on top of Railway's Public API.
 
@@ -13,25 +24,28 @@ Simple dashboard built on top of Railway's Public API.
 ### Initial Setup
 
 1. Clone the repository:
-git clone <repository-url>
-cd railway-monitor
+`git clone git@github.com:BartoszJarocki/railway-watch.git`
+`cd railway-monitor`
 
 2. Install dependencies:
-pnpm install
+`pnpm install`
 
 3. Environment Configuration:
 Create a `.env.local` file in the root directory:
+
+```
 RAILWAY_API_ACCOUNT_TOKEN=<your-token>
+```
 
 4. Start development server:
-pnpm dev
+`pnpm dev`
 
 The application will be available at <http://localhost:3000>
 
 ### Build for Production
 
-pnpm build
-pnpm start
+`pnpm build`
+`pnpm start`
 
 ## 2. Project Structure Overview
 
@@ -71,24 +85,24 @@ src/
 3. Styling
    - Use Tailwind CSS for styling
    - Follow the design system defined in the UI components
-   - Use the cn() utility for conditional class names
+   - Use the `cn()` utility for conditional class names
 
 ### Development Process
 
 1. Create a new feature branch
 2. Implement changes following the project structure
 3. Run tests and linting:
-   pnpm lint
+   `pnpm lint`
 4. Format code:
-   pnpm format
+   `pnpm format`
 5. Submit pull request
 
 ### Package Management
 
-- Add new dependencies: pnpm add <package-name>
-- Add dev dependencies: pnpm add -D <package-name>
-- Update dependencies: pnpm update
-- Clean install: pnpm install --frozen-lockfile
+- Add new dependencies: `pnpm add <package-name>`
+- Add dev dependencies: `pnpm add -D <package-name>`
+- Update dependencies: `pnpm update`
+- Clean install: `pnpm install --frozen-lockfile`
 
 ## 5. Common Troubleshooting Steps
 
