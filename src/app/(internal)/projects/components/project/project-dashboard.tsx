@@ -73,7 +73,7 @@ export const ProjectDashboard = (props: {
               </div>
 
               {currentEnv.serviceInstances.edges.length > 0 ? (
-                <div className="grid gap-4">
+                <div className="grid gap-4 lg:grid-cols-2">
                   {project.services.edges
                     .filter(({ node }) =>
                       node.serviceInstances.edges.some(

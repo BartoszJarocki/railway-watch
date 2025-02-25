@@ -13,7 +13,13 @@ import {
 import { RailwayComponentId } from "@/components/railway-compontent-id";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { FragmentType, useFragment } from "@/lib/network/gql";
 import { ServiceInstanceFragment } from "@/lib/network/operations";
 import {
@@ -101,25 +107,6 @@ export const ProjectServiceInstance = (props: {
                   deployment={instance.latestDeployment}
                 />
               )}
-              <Button
-                size="sm"
-                variant="outline"
-                disabled={isLoading}
-                onClick={handleDeploymentRestart}
-              >
-                <RefreshCcw className="size-3" />
-                Restart
-              </Button>
-
-              <Button
-                size="sm"
-                variant="outline"
-                disabled={isLoading}
-                onClick={handleDeploymentStop}
-              >
-                <StopCircleIcon className="size-3" />
-                Stop
-              </Button>
             </div>
           </div>
         </div>
@@ -176,6 +163,28 @@ export const ProjectServiceInstance = (props: {
           </div>
         )}
       </CardContent>
+
+      <CardFooter className="border-t px-5 py-3 flex gap-3">
+        <Button
+          size="sm"
+          variant="outline"
+          disabled={isLoading}
+          onClick={handleDeploymentRestart}
+        >
+          <RefreshCcw className="size-3" />
+          Restart
+        </Button>
+
+        <Button
+          size="sm"
+          variant="outline"
+          disabled={isLoading}
+          onClick={handleDeploymentStop}
+        >
+          <StopCircleIcon className="size-3" />
+          Stop
+        </Button>
+      </CardFooter>
     </Card>
   );
 };

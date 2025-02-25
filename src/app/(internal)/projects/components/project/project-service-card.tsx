@@ -1,7 +1,13 @@
 import { AlertCircle } from "lucide-react";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { FragmentType, useFragment } from "@/lib/network/gql";
 import { EnvironmentFragment, ServiceFragment } from "@/lib/network/operations";
 
@@ -43,10 +49,6 @@ export const ProjectServiceCard = (props: {
           <p className="text-sm text-gray-500">
             {deploymentsCount} deployment{deploymentsCount !== 1 ? "s" : ""}
           </p>
-
-          <Button onClick={handleRedeployService} size="sm">
-            Trigger deployment
-          </Button>
         </div>
         <RailwayComponentId name="Service id" value={service.id} />
       </CardHeader>
@@ -71,6 +73,12 @@ export const ProjectServiceCard = (props: {
           </Alert>
         )}
       </CardContent>
+
+      <CardFooter className="border-t px-5 py-3">
+        <Button onClick={handleRedeployService} size="sm">
+          Trigger deployment
+        </Button>
+      </CardFooter>
     </Card>
   );
 };
